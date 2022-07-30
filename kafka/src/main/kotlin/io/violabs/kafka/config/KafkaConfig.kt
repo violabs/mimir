@@ -8,23 +8,20 @@ import org.springframework.kafka.listener.DeadLetterPublishingRecoverer
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.support.converter.JsonMessageConverter
 import org.springframework.kafka.support.converter.RecordMessageConverter
-import org.springframework.util.backoff.FixedBackOff
 
 @Configuration
-class KafkaConfig {
+class KafkaConfig(private val kafkaProperties: KafkaProperties) {
 
   @Bean
   fun errorHandler(template: KafkaTemplate<Any, Any>): DefaultErrorHandler {
-    val backoff = FixedBackOff(1000L, 2)
-
     val deadLetterRecoverer = DeadLetterPublishingRecoverer(template)
 
-    return DefaultErrorHandler(deadLetterRecoverer, backoff)
+    return DefaultErrorHandler(deadLetterRecoverer, kafkaProperties.error.toFixedBackOff())
   }
 
   @Bean
   fun converter(): RecordMessageConverter = JsonMessageConverter()
 
   @Bean
-  fun godTopic(): NewTopic = NewTopic("god.topic", 1, 1.toShort())
+  fun godTopic(): NewTopic = kafkaProperties.gods.toNewTopic()
 }

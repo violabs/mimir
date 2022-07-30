@@ -1,4 +1,13 @@
 
+app.topics:
+  error:
+    interval: 1000
+    max-retry: 2
+  gods:
+    topic-name: god.topic
+    partitions: 2
+    replications: 1
+
 spring.kafka:
   bootstrap-servers:
     - localhost:29092

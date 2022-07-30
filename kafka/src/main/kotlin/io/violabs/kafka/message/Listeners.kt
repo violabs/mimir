@@ -12,7 +12,7 @@ class GodListener {
   fun listen(god: God) {
     logger.info { "Received: $god" }
 
-    if (god.name?.contains("null") == false) return
+    if (god.name?.isNotBlank() == true) return
 
     throw Exception("No valid god was provided!")
   }
