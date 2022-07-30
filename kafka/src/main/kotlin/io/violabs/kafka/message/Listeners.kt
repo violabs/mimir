@@ -17,5 +17,10 @@ class GodListener {
     throw Exception("No valid god was provided!")
   }
 
+  @KafkaListener(id = "godDLTGroup", topics = ["god.topic.DLT"])
+  fun listen(info: String) {
+    logger.info { "Received DLT: $info" }
+  }
+
   companion object : KLogging()
 }
