@@ -1,6 +1,6 @@
 version: '2'
 services:
-  zookeeper-0:
+  kafkaconnect-zookeeper-0:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -8,7 +8,7 @@ services:
     ports:
       - "22181:2181"
 
-  zookeeper-1:
+  kafkaconnect-zookeeper-1:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -16,51 +16,113 @@ services:
     ports:
       - "32181:2181"
 
-  kafka-0:
+  kafkaconnect-kafka-0:
     image: confluentinc/cp-kafka:latest
     depends_on:
-      - zookeeper-0
-      - zookeeper-1
+      - kafkaconnect-zookeeper-0
+      - kafkaconnect-zookeeper-1
     ports:
       - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-0:2181,zookeeper-1:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-0:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ZOOKEEPER_CONNECT: kafkaconnect-zookeeper-0:2181,kafkaconnect-zookeeper-1:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkaconnect-kafka-0:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  kafka-1:
+  kafkaconnect-kafka-1:
     image: confluentinc/cp-kafka:latest
     depends_on:
-      - zookeeper-0
-      - zookeeper-1
+      - kafkaconnect-zookeeper-0
+      - kafkaconnect-zookeeper-1
     ports:
       - "39092:39092"
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-0:2181,zookeeper-1:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:39092
+      KAFKA_ZOOKEEPER_CONNECT: kafkaconnect-zookeeper-0:2181,kafkaconnect-zookeeper-1:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkaconnect-kafka-1:9092,PLAINTEXT_HOST://localhost:39092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
+  kafkaconnect-schema-registry-0:
+    image: confluentinc/cp-schema-registry:latest
+    ports:
+      - "8085:8085"
     depends_on:
-      - zookeeper-0
-      - zookeeper-1
-      - kafka-0
-      - kafka-1
+      - kafkaconnect-zookeeper-0
+      - kafkaconnect-kafka-0
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafkaconnect-kafka-0:9092
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: kafkaconnect-zookeeper-0:2181
+      SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: PLAINTEXT
+      SCHEMA_REGISTRY_HOST_NAME: kafkaconnect-schema-registry-0
+      SCHEMA_REGISTRY_LISTENERS: http://kafkaconnect-schema-registry-0:8085
+      SCHEMA_REGISTRY_SCHEMA_REGISTRY_INTER_INSTANCE_PROTOCOL: "http"
+      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
+      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
+
+  kafkaconnect-kafka-connect-0:
+    image: confluentinc/cp-kafka-connect:latest
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafkaconnect-kafka-0
+      - kafkaconnect-schema-registry-0
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: kafkaconnect-kafka-0:9092
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: _connect_configs
+      CONNECT_STATUS_STORAGE_TOPIC: _connect_status
+      CONNECT_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_TOPIC: _connect_offset
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://kafkaconnect-schema-registry-0:8085
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://kafkaconnect-schema-registry-0:8085
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_REST_ADVERTISED_HOST_NAME: kafkaconnect-kafka-connect-0
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+    volumes:
+      - $PWD/data/connectors/:/connectors/
+    command:
+      - bash
+      - -c
+      - |
+        echo "Installing Connector"
+        confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:10.0.1
+        #
+        echo "Launching Kafka Connect worker"
+        /etc/confluent/docker/run &
+        #
+        sleep infinity
+
+  kafkaconnect-kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafkaconnect-kafka-ui
+    depends_on:
+      - kafkaconnect-zookeeper-0
+      - kafkaconnect-zookeeper-1
+      - kafkaconnect-kafka-0
+      - kafkaconnect-kafka-1
+      - kafkaconnect-schema-registry-0
+      - kafkaconnect-kafka-connect-0
     ports:
       - "8081:8080"
     restart: always
     environment:
-      - KAFKA_CLUSTERS_0_NAME=local0
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-0:9092
-      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper-0:2181
-      - KAFKA_CLUSTERS_1_NAME=local1
-      - KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS=kafka-1:9092
-      - KAFKA_CLUSTERS_1_ZOOKEEPER=zookeeper-1:2181
+      KAFKA_CLUSTERS_0_NAME: local0
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafkaconnect-kafka-0:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: kafkaconnect-zookeeper-0:2181
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://kafkaconnect-schema-registry-0:8085
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafkaconnect-kafka-connect-0:8083
+      KAFKA_CLUSTERS_1_NAME: local1
+      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: kafkaconnect-kafka-1:9092
+      KAFKA_CLUSTERS_1_ZOOKEEPER: kafkaconnect-zookeeper-1:2181
+      KAFKA_CLUSTERS_1_SCHEMAREGISTRY: http://kafkaconnect-schema-registry-0:8085
+      KAFKA_CLUSTERS_1_KAFKACONNECT_0_NAME: first
+      KAFKA_CLUSTERS_1_KAFKACONNECT_0_ADDRESS: http://kafkaconnect-kafka-connect-0:8083
