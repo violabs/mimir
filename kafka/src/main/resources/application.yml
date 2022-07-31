@@ -7,6 +7,10 @@ app.topics:
     topic-name: god.topic
     partitions: 2
     replications: 1
+  monsters:
+    topic-name: monster.topic
+    partitions: 2
+    replications: 1
 
 spring.kafka:
   bootstrap-servers:

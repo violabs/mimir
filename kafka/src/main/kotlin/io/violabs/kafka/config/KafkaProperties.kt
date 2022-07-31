@@ -8,8 +8,9 @@ import org.springframework.util.backoff.FixedBackOff
 @ConstructorBinding
 @ConfigurationProperties(prefix = "app.topics")
 class KafkaProperties(
+  var error: ErrorHandleProperties,
   var gods: TopicProperties,
-  var error: ErrorHandleProperties
+  var monsters: TopicProperties
 ) {
 
   class TopicProperties(

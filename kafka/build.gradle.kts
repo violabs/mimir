@@ -18,4 +18,10 @@ dependencies {
   implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("org.springframework.kafka:spring-kafka-test")
+  testImplementation("org.testcontainers:kafka:1.17.3")
+}
+
+tasks.withType<Test> {
+  useJUnitPlatform()
 }

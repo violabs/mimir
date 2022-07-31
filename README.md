@@ -6,7 +6,7 @@ This will hold all the different examples that I am planning on integrating base
 
 ### Event/Message
 
-* Kafka
+* [Kafka](https://github.com/violabs/mimir/tree/main/kafka)
 * Kafka Connect
 * RabbitMQ
 

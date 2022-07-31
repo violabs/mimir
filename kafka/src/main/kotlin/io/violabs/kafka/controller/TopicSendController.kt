@@ -1,9 +1,8 @@
 package io.violabs.kafka.controller
 
-import io.violabs.kafka.config.KafkaProperties
-import io.violabs.kafka.domain.God
+import io.violabs.kafka.message.GodProducer
+import io.violabs.kafka.message.MonsterProducer
 import org.springframework.http.ResponseEntity
-import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("send")
 class TopicSendController(
-  private val kafkaProperties: KafkaProperties,
-  private val kafkaTemplate: KafkaTemplate<Any, Any>
+  private val godProducer: GodProducer,
+  private val monsterProducer: MonsterProducer
 ) {
 
   @PostMapping("gods/{name}")
-  fun sendProse(@PathVariable name: String): ResponseEntity<String> {
-    kafkaTemplate.send(kafkaProperties.gods.topicName, God(name))
-    return ResponseEntity.ok("Send event for god: $name")
-  }
+  fun sendGod(@PathVariable name: String): ResponseEntity<String> = godProducer.send(name)
+
+  @PostMapping("monsters/{name}")
+  fun sendMonster(@PathVariable name: String): ResponseEntity<String> = monsterProducer.send(name)
 }
