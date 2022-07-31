@@ -12,7 +12,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/first" />
-            <option value="$PROJECT_DIR$/kafka" />
+            <option value="$PROJECT_DIR$/simpleKafka" />
           </set>
         </option>
       </GradleProjectSettings>
