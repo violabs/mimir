@@ -1,23 +1,38 @@
 # Mimir
 
-This will hold all the different examples that I am planning on integrating based on different needs.
+---
 
-## Plans
+This project will contained segmented projects that are examples of
+how to wire up specific external clients to Spring Boot.
 
-### Event/Message
+This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
 
-* [Kafka](https://github.com/violabs/mimir/tree/main/kafka)
-* Kafka Connect
-* RabbitMQ
+---
+
+## Planned Content
+
+### Caching
+* MemCache
+* Redis
+* Spring Cache
 
 ### Databases
-
-* Postgres
-* Redis
-* Neo4j
+* Couchbase
+* DynamoDB
+* Firebase Firestore
 * MongoDB
+* MySQL
+* Neo4j
+* PostgreSQL
+* Redis
+
+### Event/Message
+* ActiveMQ
+* [Simple Kafka Setup](https://github.com/violabs/mimir/tree/main/simpleKafka)
+* [Kafka Connect - [WORK IN PROGRESS]](https://github.com/violabs/mimir/tree/main/kafkaConnect)
+* ksql
+* RabbitMQ
 
 ### File Management
-
-* SFTP
 * Local file write
+* SFTP
