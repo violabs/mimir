@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/first" />
             <option value="$PROJECT_DIR$/kafkaConnect" />
             <option value="$PROJECT_DIR$/simpleKafka" />
+            <option value="$PROJECT_DIR$/simpleRabbitMQ" />
           </set>
         </option>
       </GradleProjectSettings>

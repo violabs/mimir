@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  rabbit-mq:
+    image: rabbitmq:latest
+    environment:
+      RABBITMQ_NODENAME: example
+    ports:
+      - '5672:5672'
+      - '15672:15672'
