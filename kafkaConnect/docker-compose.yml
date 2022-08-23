@@ -1,4 +1,4 @@
-version: '2'
+version: '3.8'
 services:
   kafkaconnect-zookeeper-0:
     image: confluentinc/cp-zookeeper:latest
@@ -64,7 +64,7 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
 
   kafkaconnect-kafka-connect-0:
-    image: confluentinc/cp-kafka-connect:latest
+    image: confluentinc/cp-kafka-connect:6.0.1
     ports:
       - "8083:8083"
     depends_on:
@@ -74,6 +74,7 @@ services:
       CONNECT_BOOTSTRAP_SERVERS: kafkaconnect-kafka-0:9092
       CONNECT_GROUP_ID: compose-connect-group
       CONNECT_CONFIG_STORAGE_TOPIC: _connect_configs
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_STATUS_STORAGE_TOPIC: _connect_status
       CONNECT_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_OFFSET_STORAGE_TOPIC: _connect_offset
@@ -117,12 +118,14 @@ services:
       KAFKA_CLUSTERS_0_NAME: local0
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafkaconnect-kafka-0:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: kafkaconnect-zookeeper-0:2181
+      KAFKA_CLUSTERS_0_JMXPORT: 9997
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://kafkaconnect-schema-registry-0:8085
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafkaconnect-kafka-connect-0:8083
       KAFKA_CLUSTERS_1_NAME: local1
       KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: kafkaconnect-kafka-1:9092
       KAFKA_CLUSTERS_1_ZOOKEEPER: kafkaconnect-zookeeper-1:2181
+      KAFKA_CLUSTERS_1_JMXPORT: 9998
       KAFKA_CLUSTERS_1_SCHEMAREGISTRY: http://kafkaconnect-schema-registry-0:8085
       KAFKA_CLUSTERS_1_KAFKACONNECT_0_NAME: first
       KAFKA_CLUSTERS_1_KAFKACONNECT_0_ADDRESS: http://kafkaconnect-kafka-connect-0:8083
