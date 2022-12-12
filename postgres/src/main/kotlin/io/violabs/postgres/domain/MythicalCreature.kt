@@ -1,5 +1,6 @@
 package io.violabs.postgres.domain
 
+import io.violabs.core.defaultHashCode
 import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -16,4 +17,8 @@ class MythicalCreature(
     var name: String? = null
 ) {
     override fun toString(): String = "MythicalCreature(id: $id, name: $name)"
+
+    override fun hashCode(): Int = id.defaultHashCode(31) + name.defaultHashCode()
+
+    override fun equals(other: Any?): Boolean = other != null && this.hashCode() == other.hashCode()
 }

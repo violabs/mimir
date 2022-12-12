@@ -1,3 +1,4 @@
+
 plugins {
     id("org.springframework.boot")
 
@@ -25,5 +26,22 @@ repositories {
 }
 
 tasks.withType<Test> {
+    systemProperty("spring.profiles.active", "test")
+
     useJUnitPlatform()
 }
+// Couldn't get it working - not the focus
+//fun startDocker() {
+//    exec {
+//        executable("docker compose -f docker-compose.yml up")
+//    }
+//}
+//
+//tasks.register("docker") {
+//
+//    startDocker()
+//}
+//
+//tasks.named("build") {
+//    this.dependsOn("docker")
+//}
