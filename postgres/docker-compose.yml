@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  postgres: # https://hub.docker.com/_/postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"

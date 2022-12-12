@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/first" />
             <option value="$PROJECT_DIR$/kafkaConnect" />
+            <option value="$PROJECT_DIR$/postgres" />
             <option value="$PROJECT_DIR$/simpleKafka" />
           </set>
         </option>
