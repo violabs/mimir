@@ -1,6 +1,7 @@
 package io.violabs.postgres.services
 
 import io.violabs.postgres.domain.MythicalCreature
+import io.violabs.springjpacore.DefaultService
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

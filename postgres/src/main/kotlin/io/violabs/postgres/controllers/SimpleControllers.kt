@@ -2,6 +2,7 @@ package io.violabs.postgres.controllers
 
 import io.violabs.postgres.domain.MythicalCreature
 import io.violabs.postgres.services.MythicalCreatureService
+import io.violabs.springjpacore.DefaultController
 import org.springframework.web.bind.annotation.*
 import java.util.*
 

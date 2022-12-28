@@ -23,7 +23,7 @@ This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
 * MongoDB
 * MySQL
 * Neo4j
-* PostgreSQL
+* [PostgreSQL](https://github.com/violabs/mimir/tree/main/postgres)
 * Redis
 
 ### Event/Message
