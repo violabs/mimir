@@ -1,8 +1,8 @@
 package io.violabs.springjpacore
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-abstract class DefaultService<T, ID, REPO : CrudRepository<T, ID>>(private val repository: REPO) {
+abstract class DefaultService<T, ID, REPO : JpaRepository<T, ID>>(private val repository: REPO) {
     fun findById(id: ID): T? = repository.findById(id!!).orElse(null)
     fun findAll(): List<T> = repository.findAll().toList()
     fun <S : T> save(item: S): S = repository.save(item!!)

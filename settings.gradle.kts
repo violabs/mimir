@@ -1,14 +1,15 @@
 
 rootProject.name = "mimir"
 
-val modules: Map<Int, String> = mapOf(
-  0 to "core",
-  1 to "first",
-  2 to "simpleKafka",
-  3 to "kafkaConnect",
-  4 to "postgres",
-  5 to "core:springJpaCore",
-  6 to "core:sharedSql"
+val modules: List<String> = listOf(
+  "core",
+  "core:springJpaCore",
+  "core:sharedSql",
+  "first",
+  "simpleKafka",
+  "kafkaConnect",
+  "postgres",
+  "mysql"
 )
 
-modules.values.forEach(::include)
+modules.forEach(::include)

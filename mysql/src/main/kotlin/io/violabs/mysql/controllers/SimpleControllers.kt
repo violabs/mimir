@@ -1,7 +1,7 @@
-package io.violabs.sharedsql.controllers
+package io.violabs.mysql.controllers
 
-import io.violabs.sharedsql.domain.MythicalCreature
-import io.violabs.sharedsql.services.MythicalCreatureService
+import io.violabs.mysql.domain.MythicalCreature
+import io.violabs.mysql.services.MythicalCreatureService
 import io.violabs.springjpacore.DefaultController
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -9,4 +9,4 @@ import java.util.*
 @RestController
 @RequestMapping("mythicalCreatures")
 class MythicalCreatureController(service: MythicalCreatureService) :
-    DefaultController<MythicalCreature, UUID, MythicalCreatureService>(service)
+    DefaultController<MythicalCreature, Long, MythicalCreatureService>(service)

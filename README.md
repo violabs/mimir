@@ -22,9 +22,12 @@ This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
 * Firebase Firestore
 * MongoDB
 * MySQL
+* Oracle SQL
+* Microsoft SQL Server
 * Neo4j
 * [PostgreSQL](https://github.com/violabs/mimir/tree/main/postgres)
 * Redis
+* IBM AS400
 
 ### Event/Message
 * ActiveMQ
@@ -32,6 +35,9 @@ This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
 * [Kafka Connect - [WORK IN PROGRESS]](https://github.com/violabs/mimir/tree/main/kafkaConnect)
 * ksql
 * RabbitMQ
+
+### Data Processing
+* Hazelcast
 
 ### File Management
 * Local file write

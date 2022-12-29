@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  mysql-test: # https://hub.docker.com/_/mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: simpletest
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpassword
+    ports:
+      - "3306:3306"

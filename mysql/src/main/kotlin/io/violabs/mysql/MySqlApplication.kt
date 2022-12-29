@@ -1,13 +1,13 @@
-package io.violabs.postgres
+package io.violabs.mysql
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class PostgresApplication
+class MySqlApplication
 
 fun main(args: Array<String>) {
-    runApplication<PostgresApplication>(*args)
+    runApplication<MySqlApplication>(*args)
         .beanDefinitionNames
         .sorted()
         .forEach(::println)

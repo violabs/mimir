@@ -6,6 +6,8 @@ plugins {
 }
 
 dependencies {
+  implementation(project(":core"))
+
   implementation(kotlin("stdlib-jdk8"))
   implementation(kotlin("reflect"))
 

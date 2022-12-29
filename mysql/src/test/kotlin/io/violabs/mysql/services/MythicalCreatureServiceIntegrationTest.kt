@@ -1,18 +1,18 @@
-package io.violabs.postgres.services
+package io.violabs.mysql.services
 
-import io.violabs.postgres.domain.MythicalCreature
+import io.violabs.mysql.domain.MythicalCreature
 import io.violabs.springjpacore.ServiceIntegrationTestHarness
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.util.UUID
+
 
 @SpringBootTest
 class MythicalCreatureServiceIntegrationTest(
     @Autowired private val mythicalCreatureRepository: MythicalCreatureRepository,
     @Autowired private val mythicalCreatureService: MythicalCreatureService
-) : ServiceIntegrationTestHarness<UUID, MythicalCreature, MythicalCreatureRepository, MythicalCreatureService>(
+) : ServiceIntegrationTestHarness<Long, MythicalCreature, MythicalCreatureRepository, MythicalCreatureService>(
     mythicalCreatureRepository,
     mythicalCreatureService,
     Options(
