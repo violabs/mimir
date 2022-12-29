@@ -11,11 +11,12 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/sharedSql" />
+            <option value="$PROJECT_DIR$/core/springJpaCore" />
             <option value="$PROJECT_DIR$/first" />
             <option value="$PROJECT_DIR$/kafkaConnect" />
             <option value="$PROJECT_DIR$/postgres" />
             <option value="$PROJECT_DIR$/simpleKafka" />
-            <option value="$PROJECT_DIR$/springJpaCore" />
           </set>
         </option>
       </GradleProjectSettings>

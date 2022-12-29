@@ -8,7 +8,8 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":springJpaCore"))
+    implementation(project(":core:springJpaCore"))
+    implementation(project(":core:sharedSql"))
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
