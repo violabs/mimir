@@ -9,7 +9,8 @@ val modules: List<String> = listOf(
   "simpleKafka",
   "kafkaConnect",
   "postgres",
-  "mysql"
+  "mysql",
+  "msSqlServer"
 )
 
 modules.forEach(::include)

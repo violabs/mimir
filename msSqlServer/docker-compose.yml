@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  mssqlserver-test: # https://hub.docker.com/_/mysql
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: Str0ngPassword!
+      MSSQL_PID: Evaluation # Evaluation, Developer, Express, Web, Standard, Enterprise, <product key>
+    ports:
+      - "1433:1433"

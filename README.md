@@ -21,8 +21,7 @@ This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
 * DynamoDB
 * Firebase Firestore
 * MongoDB
-* MySQL
-* Oracle SQL
+* [MySQL](https://github.com/violabs/mimir/tree/main/postgres)
 * Microsoft SQL Server
 * Neo4j
 * [PostgreSQL](https://github.com/violabs/mimir/tree/main/postgres)
