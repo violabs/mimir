@@ -17,7 +17,7 @@ dependencies {
     }
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("io.milvus:milvus-sdk-java:2.2.3")
+    implementation("io.milvus:milvus-sdk-java:2.0.4")
 
     testImplementation("com.github.violabs:wesley:1.1.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

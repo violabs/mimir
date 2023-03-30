@@ -1,9 +1,17 @@
 package io.violabs.milvus.domain
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.milvus.grpc.DataType
+import io.milvus.param.IndexType
+import io.milvus.param.MetricType
 import io.milvus.param.alias.AlterAliasParam
 import io.milvus.param.alias.CreateAliasParam
 import io.milvus.param.collection.CreateCollectionParam
+import io.milvus.param.index.CreateIndexParam
+import io.milvus.param.index.DropIndexParam
+import io.milvus.param.partition.CreatePartitionParam
+import io.milvus.param.partition.DropPartitionParam
+import io.milvus.param.partition.HasPartitionParam
 import io.milvus.param.collection.FieldType as MilvusFieldType
 
 //https://milvus.io/docs/v2.0.x/create_collection.md
@@ -69,5 +77,70 @@ object Milvus {
                     .withCollectionName(collectionName)
                     .build()
         }
+    }
+
+    data class Partition(
+        val collectionName: String? = null,
+        val name: String? = null
+    ) {
+        fun toCreateLibraryClass(): CreatePartitionParam =
+            CreatePartitionParam
+                .newBuilder()
+                .also {
+                    collectionName?.let(it::withCollectionName)
+                    name?.let(it::withPartitionName)
+                }
+                .build()
+
+        fun toDropLibraryClass(): DropPartitionParam =
+            DropPartitionParam
+                .newBuilder()
+                .also {
+                    collectionName?.let(it::withCollectionName)
+                    name?.let(it::withPartitionName)
+                }
+                .build()
+
+        fun toHasLibraryClass(): HasPartitionParam =
+            HasPartitionParam
+                .newBuilder()
+                .also {
+                    collectionName?.let(it::withCollectionName)
+                    name?.let(it::withPartitionName)
+                }
+                .build()
+    }
+
+    data class Index(
+        val collectionName: String? = null,
+        val fieldName: String? = null,
+        val indexType: IndexType? = null,
+        val metricType: MetricType? = null,
+        val extraParam: Map<String, Any?>? = null,
+        val syncMode: Boolean? = null
+    ) {
+        fun toCreateLibraryClass(objectMapper: ObjectMapper): CreateIndexParam =
+            CreateIndexParam
+                .newBuilder()
+                .also {
+                    collectionName?.let(it::withCollectionName)
+                    fieldName?.let(it::withFieldName)
+                    indexType?.let(it::withIndexType)
+                    metricType?.let(it::withMetricType)
+                    extraParam?.let { map ->
+                        it.withExtraParam(objectMapper.writeValueAsString(map))
+                    }
+                    syncMode?.let(it::withSyncMode)
+                }
+                .build()
+
+        fun toDropLibraryClass(): DropIndexParam =
+            DropIndexParam
+                .newBuilder()
+                .also {
+                    collectionName?.let(it::withCollectionName)
+                    fieldName?.let(it::withFieldName)
+                }
+                .build()
     }
 }

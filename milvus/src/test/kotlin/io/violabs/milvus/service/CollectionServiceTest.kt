@@ -62,4 +62,17 @@ class CollectionServiceTest(
             result.collectionNamesList[0] == collectionName
         }
     }
+
+    @Test
+    fun `useMemory should use the memory for the collection`() = test {
+        expectTrue()
+
+        whenever {
+            val result = collectionService.useMemory(collectionName) {
+                "Success"
+            }
+
+            result == "Success"
+        }
+    }
 }

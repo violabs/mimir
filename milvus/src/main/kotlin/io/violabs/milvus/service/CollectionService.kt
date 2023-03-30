@@ -56,4 +56,30 @@ class CollectionService(private val milvusClient: MilvusServiceClient) {
             .build()
             .let(milvusClient::showCollections)
             .data
+
+    fun <T> useMemory(collectionName: String, runnable: () -> T?): T? {
+        loadInMemoryFor(collectionName)
+
+        return runnable().also {
+            releaseMemoryFor(collectionName)
+        }
+    }
+
+    fun loadInMemoryFor(collectionName: String): String? =
+        LoadCollectionParam
+            .newBuilder()
+            .withCollectionName(collectionName)
+            .build()
+            .let(milvusClient::loadCollection)
+            ?.data
+            ?.msg
+
+    fun releaseMemoryFor(collectionName: String): String? =
+        ReleaseCollectionParam
+            .newBuilder()
+            .withCollectionName(collectionName)
+            .build()
+            .let(milvusClient::releaseCollection)
+            ?.data
+            ?.msg
 }
