@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class DbSetupService(private val collectionService: CollectionService) {
     fun createBookCollection(): String? {
-        val request = Milvus.Collection.CreateRequest(
+        val request = Milvus.Collection(
             collectionName = "books",
             description = "Test book search",
             shardsNumber = 2,
@@ -28,6 +28,6 @@ class DbSetupService(private val collectionService: CollectionService) {
             )
         )
 
-        return collectionService.createCollection(request)
+        return collectionService.create(request)
     }
 }

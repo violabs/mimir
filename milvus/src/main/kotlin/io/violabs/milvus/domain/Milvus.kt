@@ -1,6 +1,8 @@
 package io.violabs.milvus.domain
 
 import io.milvus.grpc.DataType
+import io.milvus.param.alias.AlterAliasParam
+import io.milvus.param.alias.CreateAliasParam
 import io.milvus.param.collection.CreateCollectionParam
 import io.milvus.param.collection.FieldType as MilvusFieldType
 
@@ -26,31 +28,45 @@ object Milvus {
                 .build()
     }
 
-    object Collection {
-        data class CreateRequest(
-            val collectionName: String? = null,
-            val description: String? = null,
-            val shardsNumber: Int? = null,
-            val fieldTypes: List<FieldType>? = null
-        ) {
-            constructor(
-                collectionName: String? = null,
-                description: String? = null,
-                shardsNumber: Int? = null,
-                vararg list: FieldType
-            ) : this(collectionName, description, shardsNumber, list.toList())
+    data class Collection(
+        val collectionName: String? = null,
+        val description: String? = null,
+        val shardsNumber: Int? = null,
+        val fieldTypes: List<FieldType>? = null
+    ) {
+        constructor(
+            collectionName: String? = null,
+            description: String? = null,
+            shardsNumber: Int? = null,
+            vararg list: FieldType
+        ) : this(collectionName, description, shardsNumber, list.toList())
 
-            fun toLibraryClass(): CreateCollectionParam =
-                CreateCollectionParam
-                    .newBuilder()
-                    .also {
-                        collectionName?.let(it::withCollectionName)
-                        description?.let(it::withDescription)
-                        shardsNumber?.let(it::withShardsNum)
-                        fieldTypes?.forEach { fieldType ->
-                            it.addFieldType(fieldType.toLibraryClass())
-                        }
+        fun toLibraryClass(): CreateCollectionParam =
+            CreateCollectionParam
+                .newBuilder()
+                .also {
+                    collectionName?.let(it::withCollectionName)
+                    description?.let(it::withDescription)
+                    shardsNumber?.let(it::withShardsNum)
+                    fieldTypes?.forEach { fieldType ->
+                        it.addFieldType(fieldType.toLibraryClass())
                     }
+                }
+                .build()
+
+        data class Alias(val name: String, val collectionName: String) {
+            fun toCreateLibraryClass(): CreateAliasParam =
+                CreateAliasParam
+                    .newBuilder()
+                    .withAlias(name)
+                    .withCollectionName(collectionName)
+                    .build()
+
+            fun toAlterLibraryClass(): AlterAliasParam =
+                AlterAliasParam
+                    .newBuilder()
+                    .withAlias(name)
+                    .withCollectionName(collectionName)
                     .build()
         }
     }

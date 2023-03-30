@@ -16,7 +16,7 @@ class DbSetupServiceTest(
     @Test
     fun `createBookCollection should create the correct collection`() = test {
         setup {
-            collectionService.deleteCollection(collectionName)
+            collectionService.drop(collectionName)
         }
 
         expectTrue()
@@ -24,11 +24,11 @@ class DbSetupServiceTest(
         whenever {
             val result = dbSetupService.createBookCollection()
 
-            result == "Success" && collectionService.collectionExists(collectionName)
+            result == "Success" && collectionService.existsByName(collectionName)
         }
 
         teardown {
-            collectionService.deleteCollection(collectionName)
+            collectionService.drop(collectionName)
         }
     }
 }

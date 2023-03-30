@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class CollectionService(private val milvusClient: MilvusServiceClient) {
-    fun createCollection(createRequest: Milvus.Collection.CreateRequest): String? =
+    fun create(createRequest: Milvus.Collection): String? =
         createRequest
             .toLibraryClass()
             .let(milvusClient::createCollection)
             ?.data
             ?.msg
 
-    fun collectionExists(collectionName: String): Boolean =
+    fun existsByName(collectionName: String): Boolean =
         HasCollectionParam
             .newBuilder()
             .withCollectionName(collectionName)
@@ -25,7 +25,7 @@ class CollectionService(private val milvusClient: MilvusServiceClient) {
             .let(milvusClient::hasCollection)
             .data
 
-    fun deleteCollection(collectionName: String): String? =
+    fun drop(collectionName: String): String? =
         DropCollectionParam
             .newBuilder()
             .withCollectionName(collectionName)
@@ -34,7 +34,7 @@ class CollectionService(private val milvusClient: MilvusServiceClient) {
             ?.data
             ?.msg
 
-    fun collectionDetails(collectionName: String): DescribeCollectionResponse =
+    fun findDetailsFor(collectionName: String): DescribeCollectionResponse =
         DescribeCollectionParam
             .newBuilder()
             .withCollectionName(collectionName)
@@ -42,7 +42,7 @@ class CollectionService(private val milvusClient: MilvusServiceClient) {
             .let { milvusClient.describeCollection(it) }
             .data
 
-    fun collectionStatistics(collectionName: String): GetCollectionStatisticsResponse =
+    fun findStatisticsFor(collectionName: String): GetCollectionStatisticsResponse =
         GetCollectionStatisticsParam
             .newBuilder()
             .withCollectionName(collectionName)
@@ -50,7 +50,7 @@ class CollectionService(private val milvusClient: MilvusServiceClient) {
             .let(milvusClient::getCollectionStatistics)
             .data
 
-    fun listCollections(): ShowCollectionsResponse =
+    fun list(): ShowCollectionsResponse =
         ShowCollectionsParam
             .newBuilder()
             .build()

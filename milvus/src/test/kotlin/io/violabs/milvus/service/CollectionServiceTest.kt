@@ -17,13 +17,13 @@ class CollectionServiceTest(
 
     @BeforeEach
     fun setup() {
-        collectionService.deleteCollection(collectionName)
+        collectionService.drop(collectionName)
         dbSetupService.createBookCollection()
     }
 
     @AfterEach
     fun teardown() {
-        collectionService.deleteCollection(collectionName)
+        collectionService.drop(collectionName)
     }
 
     @Test
@@ -31,7 +31,7 @@ class CollectionServiceTest(
         expectTrue()
 
         whenever {
-            val result = collectionService.collectionDetails(collectionName)
+            val result = collectionService.findDetailsFor(collectionName)
 
             result.schema.name == collectionName
         }
@@ -42,7 +42,7 @@ class CollectionServiceTest(
         expectTrue()
 
         whenever {
-            val result = collectionService.collectionStatistics(collectionName)
+            val result = collectionService.findStatisticsFor(collectionName)
 
             println(result)
 
@@ -55,7 +55,9 @@ class CollectionServiceTest(
         expectTrue()
 
         whenever {
-            val result = collectionService.listCollections()
+            val result = collectionService.list()
+
+            println(result)
 
             result.collectionNamesList[0] == collectionName
         }
