@@ -7,6 +7,7 @@ import io.milvus.param.MetricType
 import io.milvus.param.alias.AlterAliasParam
 import io.milvus.param.alias.CreateAliasParam
 import io.milvus.param.collection.CreateCollectionParam
+import io.milvus.param.dml.InsertParam
 import io.milvus.param.index.CreateIndexParam
 import io.milvus.param.index.DropIndexParam
 import io.milvus.param.partition.CreatePartitionParam
@@ -140,6 +141,38 @@ object Milvus {
                 .also {
                     collectionName?.let(it::withCollectionName)
                     fieldName?.let(it::withFieldName)
+                }
+                .build()
+    }
+
+    data class InsertRequest(
+        val collectionName: String? = null,
+        val partitionName: String? = null,
+        val fields: List<Field>? = null
+    ) {
+        constructor(
+            collectionName: String? = null,
+            partitionName: String? = null,
+            vararg list: Field
+        ) : this(collectionName, partitionName, list.toList())
+
+        data class Field(
+            val name: String? = null,
+            val dataType: DataType? = null,
+            val values: List<Any>? = null
+        ) {
+            fun toLibraryClass(): InsertParam.Field = InsertParam.Field(name, dataType, values)
+        }
+
+        fun toLibraryClass(): InsertParam =
+            InsertParam
+                .newBuilder()
+                .also {
+                    collectionName?.let(it::withCollectionName)
+                    partitionName?.let(it::withPartitionName)
+                    fields
+                        ?.map { field -> field.toLibraryClass() }
+                        ?.also(it::withFields)
                 }
                 .build()
     }
