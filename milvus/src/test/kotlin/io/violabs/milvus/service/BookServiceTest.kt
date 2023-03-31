@@ -43,8 +43,8 @@ class BookServiceTest(
         }
 
         teardown {
-            collectionService.drop(collectionName)
-            partitionService.drop(partition)
+//            collectionService.drop(collectionName)
+//            partitionService.drop(partition)
         }
     }
 
