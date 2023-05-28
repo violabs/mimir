@@ -29,6 +29,9 @@ This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
 * Redis
 * IBM AS400
 
+### Vector Databases
+* [Milvus](https://github.com/violabs/mimir/tree/main/milvus)
+
 ### Event/Message
 * ActiveMQ
 * [Simple Kafka Setup](https://github.com/violabs/mimir/tree/main/simpleKafka)
