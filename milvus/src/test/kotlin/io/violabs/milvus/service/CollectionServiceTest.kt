@@ -59,7 +59,7 @@ class CollectionServiceTest(
 
             println(result)
 
-            result.collectionNamesList[0] == collectionName
+            result.collectionNamesList.containsAll(listOf("paintings", "books", "embedding_test"))
         }
     }
 
