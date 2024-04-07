@@ -17,11 +17,20 @@ dependencies {
     }
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("io.milvus:milvus-sdk-java:2.0.4")
+    implementation("io.milvus:milvus-sdk-java:2.3.5") {
+        exclude(group = "com.squareup.okio", module = "okio")
+        exclude(group = "commons-beanutils", module = "commons-beanutils")
+    }
+
+    implementation("com.squareup.okio:okio:3.9.0")
+    implementation("commons-beanutils:commons-beanutils:1.9.4")
 
     testImplementation("com.github.violabs:wesley:1.1.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
+
+class OverrideDependency(val artifact: String, val version: String)
+
 repositories {
     mavenCentral()
     maven { url = uri("https://jitpack.io") }

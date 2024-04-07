@@ -34,6 +34,9 @@ class CollectionService(private val milvusClient: MilvusServiceClient) {
             ?.data
             ?.msg
 
+    fun dropIfExists(collectionName: String): String? =
+        if (existsByName(collectionName)) drop(collectionName) else null
+
     fun findDetailsFor(collectionName: String): DescribeCollectionResponse =
         DescribeCollectionParam
             .newBuilder()

@@ -140,7 +140,7 @@ object Milvus {
                 .newBuilder()
                 .also {
                     collectionName?.let(it::withCollectionName)
-                    fieldName?.let(it::withFieldName)
+                    fieldName?.let(it::withIndexName)
                 }
                 .build()
     }
@@ -161,7 +161,7 @@ object Milvus {
             val dataType: DataType? = null,
             val values: List<Any>? = null
         ) {
-            fun toLibraryClass(): InsertParam.Field = InsertParam.Field(name, dataType, values)
+            fun toLibraryClass(): InsertParam.Field = InsertParam.Field(name, values)
         }
 
         fun toLibraryClass(): InsertParam =

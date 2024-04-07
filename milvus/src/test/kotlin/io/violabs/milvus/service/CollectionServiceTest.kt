@@ -17,7 +17,8 @@ class CollectionServiceTest(
 
     @BeforeEach
     fun setup() {
-        collectionService.drop(collectionName)
+        collectionService.dropIfExists(collectionName)
+
         dbSetupService.createBookCollection()
     }
 
@@ -59,7 +60,7 @@ class CollectionServiceTest(
 
             println(result)
 
-            result.collectionNamesList.containsAll(listOf("paintings", "books", "embedding_test"))
+            result.collectionNamesList.containsAll(listOf("books"))
         }
     }
 

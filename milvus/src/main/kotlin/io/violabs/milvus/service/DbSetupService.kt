@@ -2,6 +2,7 @@ package io.violabs.milvus.service
 
 import io.milvus.grpc.DataType
 import io.violabs.milvus.domain.Milvus
+import mu.KLogging
 import org.springframework.stereotype.Service
 
 @Service
@@ -28,6 +29,10 @@ class DbSetupService(private val collectionService: CollectionService) {
             )
         )
 
+        logger.info { "Creating collection: $request" }
+
         return collectionService.create(request)
     }
+
+    companion object : KLogging()
 }
