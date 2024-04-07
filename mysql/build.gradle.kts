@@ -4,6 +4,7 @@ plugins {
 
     kotlin("jvm")
     kotlin("plugin.spring")
+    id("com.avast.gradle.docker-compose") version "0.17.6"
 }
 
 dependencies {
@@ -16,33 +17,25 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
-    runtimeOnly("com.mysql:mysql-connector-j:8.0.31")
+    runtimeOnly("com.mysql:mysql-connector-j:8.3.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
+
 repositories {
     mavenCentral()
 }
 
+dockerCompose {
+    useComposeFiles.set(listOf("docker-compose.test.yml"))
+}
+
 tasks.withType<Test> {
+    dockerCompose.isRequiredBy(this)
+
     systemProperty("spring.profiles.active", "test")
 
     useJUnitPlatform()
 }
-// Couldn't get it working - not the focus
-//fun startDocker() {
-//    exec {
-//        executable("docker compose -f docker-compose.yml up")
-//    }
-//}
-//
-//tasks.register("docker") {
-//
-//    startDocker()
-//}
-//
-//tasks.named("build") {
-//    this.dependsOn("docker")
-//}

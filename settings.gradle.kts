@@ -7,10 +7,9 @@ val modules: List<String> = listOf(
   "core:sharedSql",
   "first",
   "simpleKafka",
-  "kafkaConnect",
   "postgres",
   "mysql",
-  "milvus"
+  "springMilvus"
 )
 
 modules.forEach(::include)

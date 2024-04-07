@@ -45,3 +45,7 @@ This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
 ### File Management
 * Local file write
 * SFTP
+
+## Resources
+
+https://github.com/avast/gradle-docker-compose-plugin
