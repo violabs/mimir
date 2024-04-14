@@ -9,7 +9,7 @@ val modules: List<String> = listOf(
   "simpleKafka",
   "postgres",
   "mysql",
-  "springMilvus"
+  "weaviate"
 )
 
 modules.forEach(::include)
