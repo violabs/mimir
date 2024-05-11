@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(exclude = [WeaviateVectorStoreAutoConfiguration::class])
-class MilvusApplication
+class WeaviateApplication
 
 fun main(args: Array<String>) {
-    runApplication<MilvusApplication>(*args)
+    runApplication<WeaviateApplication>(*args)
         .beanDefinitionNames
         .sorted()
         .forEach(::println)
