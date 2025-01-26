@@ -1,51 +1,64 @@
-# Mimir
+# Mimir - Spring Boot Integration Examples
 
----
+A comprehensive collection of sample projects demonstrating how to integrate various external services with Spring Boot.
 
-This project will contained segmented projects that are examples of
-how to wire up specific external clients to Spring Boot.
+## Quick Start
+### Prerequisites
+- Docker Desktop
+- Java 21+
+- Kotlin 1.9.x
 
-This utilizes Docker, Gradle, Kotlin, and Groovy (for testing).
+### Basic Setup
+1. Clone the repository
+2. Run `./gradlew build`
+3. Navigate to specific module
+4. Follow module-specific README
 
----
+## Project Structure
+- `core/` - Shared utilities and base configurations
+- `first/` - Your first Spring Boot integration example
+- Each additional folder represents a specific integration example
 
-## Planned Content
-
-### Caching
-* MemCache
-* Redis
-* Spring Cache
+## Available Integrations
 
 ### Databases
-* Couchbase
-* DynamoDB
-* Firebase Firestore
-* MongoDB
-* MySQL
-* Oracle SQL
-* Microsoft SQL Server
-* Neo4j
-* [PostgreSQL](https://github.com/violabs/mimir/tree/main/postgres)
-* Redis
-* IBM AS400
+- [PostgreSQL](/docs/databases/postgresql.md)
+- [MySQL](/docs/databases/mysql.md)
+- View [planned database integrations](/docs/databases/README.md)
+
+### Message Queues
+- [Simple Kafka Setup](/docs/messaging/kafka-simple.md)
+- View [planned messaging integrations](/docs/messaging/README.md)
+
+### Testing
+- [Selenium Integration](/docs/testing/selenium.md)
 
 ### Vector Databases
-* [Milvus](https://github.com/violabs/mimir/tree/main/milvus)
+- [Weaviate](/docs/vector-databases/weaviate.md)
 
-### Event/Message
-* ActiveMQ
-* [Simple Kafka Setup](https://github.com/violabs/mimir/tree/main/simpleKafka)
-* [Kafka Connect - [WORK IN PROGRESS]](https://github.com/violabs/mimir/tree/main/kafkaConnect)
-* ksql
-* RabbitMQ
+## Contributing
+See our [contribution guide](/docs/contributing.md) for:
+- Adding new examples
+- Code style guidelines
+- PR process
 
-### Data Processing
-* Hazelcast
+## Development
+### Building
+```bash
+./gradlew build
+```
 
-### File Management
-* Local file write
-* SFTP
+### Testing
+```bash
+./gradlew test
+```
+
+### Docker Environment
+Each module contains its own docker-compose.yml for required services.
 
 ## Resources
+- [Gradle Docker Compose Plugin](https://github.com/avast/gradle-docker-compose-plugin)
+- [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
+- [Project Documentation](/docs/README.md)
 
-https://github.com/avast/gradle-docker-compose-plugin
+[View Full Documentation](/docs/README.md)
