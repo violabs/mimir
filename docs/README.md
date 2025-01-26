@@ -1,6 +1,7 @@
 # Mimir Documentation
 
-Welcome to the Mimir documentation. This guide provides comprehensive information about integrating various services with Spring Boot.
+Welcome to the Mimir documentation. This guide provides comprehensive information about 
+integrating various services with Spring Boot.
 
 ## Documentation Structure
 

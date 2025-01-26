@@ -3,7 +3,7 @@
 ## Prerequisites
 - Docker Desktop
 - Java 21+
-- Kotlin 1.9.x
+- Kotlin 2.x
 - IDE (IntelliJ IDEA recommended)
 
 ## Initial Setup
