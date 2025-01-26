@@ -1,6 +1,6 @@
 package io.violabs.springjpacore
 
-import io.violabs.core.SimpleTestHarness
+import io.violabs.mimir.core.SimpleTestHarness
 import org.springframework.data.jpa.repository.JpaRepository
 
 abstract class ServiceIntegrationTestHarness<

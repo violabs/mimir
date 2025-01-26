@@ -1,6 +1,6 @@
 package io.violabs.mysql.domain
 
-import io.violabs.core.defaultHashCode
+import io.violabs.mimir.core.defaultHashCode
 import io.violabs.springjpacore.DbEntity
 import io.violabs.springjpacore.PropertyMap
 import javax.persistence.Entity

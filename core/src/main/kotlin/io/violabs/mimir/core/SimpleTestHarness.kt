@@ -1,4 +1,4 @@
-package io.violabs.core
+package io.violabs.mimir.core
 
 abstract class SimpleTestHarness {
 
