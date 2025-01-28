@@ -7,11 +7,17 @@ includeModules(
     "sharedSql"
   ),
   "first",
-  "simpleKafka",
-  "postgres",
-  "mysql",
-  "weaviate",
-  "selenium",
+  "kafka".subModules("simple"),
+  "database".subModules(
+    "postgres",
+    "mysql"
+  ),
+  "vector".subModules(
+    "weaviate"
+  ),
+  "testing".subModules(
+    "selenium"
+  ),
   "logs".subModules(
     "fluentBit",
     "fluentd",
