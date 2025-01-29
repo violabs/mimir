@@ -12,7 +12,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("vector-store")
+@RequestMapping("api/vector-store")
 @Tag(name = "vector-operations", description = "Endpoints for vector store operations")
 class VectorStoreController(private val dataService: DataService) {
 

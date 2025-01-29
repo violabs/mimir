@@ -21,7 +21,6 @@ COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties /app/
 COPY gradle /app/gradle
 
 # Copy all shared/required modules
-COPY artax /app/artax
 COPY buildSrc /app/buildSrc
 
 # Copy the target service
