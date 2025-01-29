@@ -1,4 +1,3 @@
-
 app:
   vector:
     weaviate:
@@ -26,5 +25,6 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     groups-order: asc
+
 server:
   port: ${PORT:8081}
