@@ -24,8 +24,7 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.springframework.ai:spring-ai-ollama-spring-boot-starter")
     implementation("org.springframework.ai:spring-ai-weaviate-store")
-    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
-	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.8.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
     implementation(platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT"))
 
