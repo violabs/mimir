@@ -22,8 +22,8 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("io.springboot.ai:spring-ai-ollama-spring-boot-starter")
-    implementation("io.springboot.ai:spring-ai-weaviate-store")
+    implementation("org.springframework.ai:spring-ai-ollama-spring-boot-starter")
+    implementation("org.springframework.ai:spring-ai-weaviate-store")
     implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
 	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.8.0")
 

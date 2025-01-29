@@ -1,5 +1,7 @@
 package io.violabs.mimir.vector.weaviate.service
 
+import org.springframework.ai.document.Document
+import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,8 +15,7 @@ class DataService(private val vectorStore: VectorStore) {
             .let { documents -> vectorStore.add(documents.toList())}
     }
 
-    fun search(query: String, limit: Int): List<Document> {
-        val request = SearchRequest.query(query).withTopK(limit)
-        return vectorStore.similaritySearch(request)
+    fun search(query: String): List<Document> {
+        return vectorStore.similaritySearch(query)?.toList() ?: emptyList()
     }
 }

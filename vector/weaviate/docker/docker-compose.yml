@@ -1,16 +1,32 @@
 version: '3.8'
 
+x-weaviate: &weaviate
+  image: semitechnologies/weaviate:stable-v1.28-bb97ca3
+  environment:
+    AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: true
+    PERSISTENCE_DATA_PATH: /var/lib/weaviate
+    QUERY_DEFAULTS_LIMIT: 25
+    DEFAULT_VECTORIZER_MODULE: none
+    CLUSTER_HOSTNAME: node1
+
 services:
-  weviate:
-    image: semitechnologies/weaviate:1.22.4
+  dev-weaviate:
+    <<: *weaviate
+    profiles: [dev]
     ports:
       - "8083:8080"
-    environment:
-      - AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
-      - PERSISTENCE_DATA_PATH=/var/lib/weaviate
-      - QUERY_DEFAULTS_LIMIT=25
-      - DEFAULT_VECTORIZER_MODULE=none
-      - CLUSTER_HOSTNAME=node1
+
+  test-weaviate:
+    <<: *weaviate
+    profiles: [ test ]
+    ports:
+      - "8083:8080"
+
+  e2e-weaviate:
+    <<: *weaviate
+    profiles: [ e2e ]
+    ports:
+      - "8083:8080"
 
 volumes:
   weviate_data:

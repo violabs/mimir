@@ -1,22 +1,30 @@
+
+app:
+  vector:
+    weaviate:
+      scheme: ${WEAVIATE_SCHEME:http}
+      host: ${WEAVIATE_HOST:localhost:8080}
+
 spring:
-  application.name: milvus
+  application.name: weaviate
   ai:
     ollama:
       chat:
         enabled: true
         options:
-          model: dolphin-mixtral:8x7b-v2.6
+          model: ${CHAT_OLLAMA_MODEL:deepseek-r1:32b}
       embedding:
         options:
-          model: dolphin-mixtral:8x7b-v2.6
-      base-url: http://localhost:11434
+          model: ${EMBEDDINGS_OLLAMA_MODEL:nomic-embed-text:latest}
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
 
 springdoc:
   api-docs:
+    enabled: true
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
     operationsSorter: method
     groups-order: asc
 server:
-  port: 8081
+  port: ${PORT:8081}

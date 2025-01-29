@@ -1,33 +1,42 @@
 package io.violabs.mimir.vector.weaviate.config
 
-import org.springframework.ai.embedding.EmbeddingClient
+import io.weaviate.client.Config
+import io.weaviate.client.WeaviateClient
+import org.springframework.ai.embedding.EmbeddingModel
 import org.springframework.ai.vectorstore.VectorStore
-import org.springframework.ai.vectorstore.WeaviateVectorStore
-import org.springframework.ai.vectorstore.WeaviateVectorStore.WeaviateVectorStoreConfig
-import org.springframework.ai.vectorstore.WeaviateVectorStore.WeaviateVectorStoreConfig.ConsistentLevel
+import org.springframework.ai.vectorstore.weaviate.WeaviateVectorStore
+import org.springframework.ai.vectorstore.weaviate.WeaviateVectorStore.ConsistentLevel
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
+@ConfigurationProperties(prefix = "app.vector.weaviate")
+class WeaviateConfigProperties(
+    val scheme: String,
+    val host: String
+)
+
 @Configuration
-class WeaviateConfig {
+class WeaviateConfig(val configProperties: WeaviateConfigProperties) {
 
     @Bean
-    fun vectorStore(embeddingClient: EmbeddingClient?): VectorStore {
-        val config = WeaviateVectorStoreConfig
-            .builder()
-            .withScheme("http")
-            .withHost("localhost:8083") // Define the metadata fields to be used
-            // in the similarity search filters.
-            .withFilterableMetadataFields(
-                listOf(
-                    WeaviateVectorStoreConfig.MetadataField.text("country"),
-                    WeaviateVectorStoreConfig.MetadataField.number("year"),
-                    WeaviateVectorStoreConfig.MetadataField.bool("active")
-                )
-            ) // Consistency level can be: ONE, QUORUM, or ALL.
-            .withConsistencyLevel(ConsistentLevel.ONE)
-            .build()
+    fun weaviateClient(): WeaviateClient {
+        return WeaviateClient(Config(
+            configProperties.scheme, configProperties.host
+        ))
+    }
 
-        return WeaviateVectorStore(config, embeddingClient)
+    @Bean
+    fun vectorStore(weaviateClient: WeaviateClient, embeddingModel: EmbeddingModel): VectorStore {
+        return WeaviateVectorStore.builder(weaviateClient, embeddingModel)
+            .objectClass("CustomClass") // Optional: defaults to "SpringAiWeaviate"
+            .consistencyLevel(ConsistentLevel.QUORUM) // Optional: defaults to ConsistentLevel.ONE
+            .filterMetadataFields(
+                listOf( // Optional: fields that can be used in filters
+                    WeaviateVectorStore.MetadataField.text("country"),
+                    WeaviateVectorStore.MetadataField.number("year")
+                )
+            )
+            .build()
     }
 }
