@@ -25,6 +25,22 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     groups-order: asc
+    doc-expansion: none  # Collapses all operations by default
+    default-models-expand-depth: -1  # Hide schemas section by default
+    disable-swagger-default-url: true
+    tags-sorter: alpha
+    syntax-highlight:
+      activated: true
+    try-it-out-enabled: true  # Enables "Try it out" feature
+    display-request-duration: true  # Shows request execution time
+    filter: true  # Adds a search box
+  packages-to-scan: io.violabs.mimir.vector.weaviate  # Adjust this to your base package
+  paths-to-match: /api/**  # Adjust this to your API paths pattern
+  show-actuator: false  # Set to true if you want to document actuator endpoints
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+  use-management-port: false
+  writer-with-default-pretty-printer: true
 
 server:
   port: ${PORT:8081}
