@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[RUN] weaviate" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="mimir.vector.weaviate.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.violabs.mimir.vector.weaviate.WeaviateApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[RUN] mysql" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="mimir.database.mysql.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.violabs.mimir.database.mysql.MySqlApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,44 @@
+
+x-weaviate: &weaviate
+  image: semitechnologies/weaviate:stable-v1.28-bb97ca3
+  environment:
+    AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: true
+    PERSISTENCE_DATA_PATH: /var/lib/weaviate
+    QUERY_DEFAULTS_LIMIT: 25
+    DEFAULT_VECTORIZER_MODULE: none
+    CLUSTER_HOSTNAME: node1
+
+x-ollama: &ollama
+  image: alpine/ollama:0.3.13
+
+services:
+  dev-weaviate:
+    <<: *weaviate
+    profiles: [dev]
+    ports:
+      - "8083:8080"
+
+  dev-ollama:
+    <<: *ollama
+    profiles: [ollama]
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "11435:11434"
+    command: ["ollama", "pull", "nomic-embed-text:latest"]
+
+  test-weaviate:
+    <<: *weaviate
+    profiles: [test]
+    ports:
+      - "8084:8080"
+
+  e2e-weaviate:
+    <<: *weaviate
+    profiles: [e2e]
+    ports:
+      - "8083:8080"
+
+networks:
+  weaviate_network:
+    driver: bridge

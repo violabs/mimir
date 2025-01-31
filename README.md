@@ -6,7 +6,7 @@ A comprehensive collection of sample projects demonstrating how to integrate var
 ### Prerequisites
 - Docker Desktop 🐳
 - Java 21+ ☕
-- Kotlin 1.9.x 💪
+- Kotlin 2.x 💪
 
 ### Basic Setup 🔧
 1. Clone the repository

@@ -1,0 +1,11 @@
+services:
+  mysql: # https://hub.docker.com/_/mysql
+    container_name: mimir-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: simple
+      MYSQL_USER: localuser
+      MYSQL_PASSWORD: localpassword
+    ports:
+      - "3306:3306"
