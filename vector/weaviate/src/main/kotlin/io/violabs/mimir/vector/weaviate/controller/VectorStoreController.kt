@@ -7,14 +7,18 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import io.violabs.mimir.core.common.VLoggable
+import io.violabs.mimir.vector.weaviate.domain.request.AddSentenceRequest
 import io.violabs.mimir.vector.weaviate.service.DataService
+import org.springframework.ai.document.Document
+import org.springframework.ai.vectorstore.SearchRequest
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("api/vector-store")
 @Tag(name = "vector-operations", description = "Endpoints for vector store operations")
-class VectorStoreController(private val dataService: DataService) {
+class VectorStoreController(private val dataService: DataService) : VLoggable {
 
     @Operation(
         summary = "Add content to vector store",
@@ -49,9 +53,9 @@ class VectorStoreController(private val dataService: DataService) {
             required = true,
             example = """{"sentences": ["First sentence to store", "Second sentence to store"]}"""
         )
-        addRequest: AddRequest
+        addRequest: AddSentenceRequest
     ) {
-        dataService.addContent(addRequest.sentences)
+        dataService.addContent(addRequest)
     }
 
     @Operation(
@@ -84,19 +88,40 @@ class VectorStoreController(private val dataService: DataService) {
     fun search(
         @Parameter(
             description = "Query text to search for similar content",
-            required = true,
-            example = "example search query"
+            required = true
         )
-        @RequestParam query: String
-    ) = dataService.search(query)
+        @RequestParam query: String,
+        @Parameter(
+            description = "The similarity percentage the query should be above",
+            required = false
+        )
+        @RequestParam(name = "similarity-threshold", required = false, defaultValue = "0.7")
+        similarityThreshold: Double,
+        @Parameter(
+            description = "The top number to retrieve",
+            required = true
+        )
+        @RequestParam(required = false, defaultValue = "10")
+        limit: Int,
+        @Parameter(
+            description = "Whether to use the similarity search and limit or just get all",
+            required = true
+        )
+        @RequestParam(name = "useLimit", required = false, defaultValue = "true") useLimit: Boolean
+    ): List<Document> {
+        log.info("searching for query: $query, similarityThreshold: $similarityThreshold, limit: $limit")
 
-    @Schema(description = "Request object for adding content to the vector store")
-    data class AddRequest(
-        @field:Schema(
-            description = "List of sentences to store",
-            required = true,
-            example = """["First sentence", "Second sentence"]"""
-        )
-        val sentences: List<String>
-    )
+        return if (useLimit) {
+            val searchRequest = SearchRequest
+                .builder()
+                .query(query)
+                .similarityThreshold(similarityThreshold)
+                .topK(limit)
+                .build()
+
+            dataService.search(searchRequest)
+        } else {
+            dataService.search(query)
+        }
+    }
 }

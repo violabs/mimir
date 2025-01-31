@@ -2,16 +2,12 @@ app:
   vector:
     weaviate:
       scheme: ${WEAVIATE_SCHEME:http}
-      host: ${WEAVIATE_HOST:localhost:8080}
+      host: ${WEAVIATE_HOST:localhost:8083}
 
 spring:
   application.name: weaviate
   ai:
     ollama:
-      chat:
-        enabled: true
-        options:
-          model: ${CHAT_OLLAMA_MODEL:deepseek-r1:32b}
       embedding:
         options:
           model: ${EMBEDDINGS_OLLAMA_MODEL:nomic-embed-text:latest}

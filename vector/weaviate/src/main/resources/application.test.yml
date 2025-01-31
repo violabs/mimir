@@ -1,0 +1,17 @@
+app:
+  vector:
+    weaviate:
+      scheme: http
+      host: localhost:8084
+
+spring:
+  application.name: weaviate
+  ai:
+    ollama:
+      embedding:
+        options:
+          model: nomic-embed-text:latest
+      base-url: http://localhost:11435
+
+server:
+  port: 8085

@@ -3,6 +3,7 @@ rootProject.name = "mimir"
 
 includeModules(
   "core".subModules(
+    "common",
     "springJpaCore",
     "sharedSql"
   ),

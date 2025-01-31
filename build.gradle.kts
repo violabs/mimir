@@ -17,7 +17,6 @@ buildscript {
 
 allprojects {
     group = "io.violabs"
-    version = "1.0-SNAPSHOT"
 
     tasks.withType<JavaCompile> {
         sourceCompatibility = JavaVersion.VERSION_17.majorVersion

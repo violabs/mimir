@@ -14,17 +14,17 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":core:common"))
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.springframework.ai:spring-ai-ollama-spring-boot-starter")
     implementation("org.springframework.ai:spring-ai-weaviate-store")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
     implementation(platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT"))
 
@@ -32,7 +32,13 @@ dependencies {
 }
 
 dockerCompose {
-    useComposeFiles.set(listOf("./docker/docker-compose.test.yml"))
+    val testDocker = nested("test")
+    testDocker.useComposeFiles.set(listOf("./docker/docker-compose.yml"))
+    testDocker.buildAdditionalArgs.add("--profile=test")
+
+    val e2eDocker = nested("e2e")
+    e2eDocker.useComposeFiles.set(listOf("./docker/docker-compose.yml"))
+    e2eDocker.buildAdditionalArgs.add("--profile=e2e")
 }
 
 tasks.withType<Test> {
