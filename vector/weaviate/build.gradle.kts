@@ -5,6 +5,8 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     id("com.avast.gradle.docker-compose") version "0.17.6"
+
+    id("io.violabs.plugins.ai.ollama-test-startup")
 }
 
 repositories {
