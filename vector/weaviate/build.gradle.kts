@@ -45,6 +45,7 @@ dockerCompose {
 
 tasks.withType<Test> {
     dockerCompose.isRequiredBy(this)
+    dependsOn(tasks.pullOnStartup)
 
     systemProperty("spring.profiles.active", "test")
 

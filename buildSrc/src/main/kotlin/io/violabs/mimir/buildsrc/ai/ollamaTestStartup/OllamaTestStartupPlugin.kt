@@ -10,7 +10,7 @@ class OllamaTestStartupPlugin : Plugin<Project> {
         target.tasks.register<PullOnStartupTask>("pullOnStartup") {
             group = "setup"
             useCustomUrl = true
-            apiUrl = "localhost:11435/api/pull"
+            apiUrl = "http://localhost:11435/api/pull"
         }
     }
 }

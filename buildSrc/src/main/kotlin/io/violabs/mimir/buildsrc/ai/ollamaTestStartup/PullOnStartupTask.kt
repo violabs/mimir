@@ -15,7 +15,7 @@ open class PullOnStartupTask : SendToRestApiTask() {
     init {
         if (!useCustomUrl && apiUrl != "localhost:8080") {
             logger.warn("Overriding provided url. provided: $apiUrl, default: localhost:11434/api/pull")
-            apiUrl = "localhost:11434/api/pull"
+            apiUrl = "http://localhost:11434/api/pull"
         }
     }
 
