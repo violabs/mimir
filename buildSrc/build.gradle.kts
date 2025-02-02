@@ -1,5 +1,15 @@
 plugins {
+    kotlin("jvm") version "2.0.20"
     `kotlin-dsl`
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(kotlin("gradle-plugin", version = "2.0.20"))
+    }
 }
 
 repositories {
@@ -33,4 +43,8 @@ gradlePlugin {
             implementationClass = "io.violabs.mimir.buildsrc.ai.ollamaTestStartup.OllamaTestStartupPlugin"
         }
     }
+}
+
+kotlin {
+    jvmToolchain(21)
 }

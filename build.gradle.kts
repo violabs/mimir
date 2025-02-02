@@ -4,8 +4,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.2.4" apply false
     id("io.spring.dependency-management") version "1.1.4" apply false
-    kotlin("jvm") version "2.0.0-Beta5" apply false
-    kotlin("plugin.spring") version "2.0.0-Beta5" apply false
+    kotlin("jvm") version "2.0.20" apply false
+    kotlin("plugin.spring") version "2.0.20" apply false
 }
 
 buildscript {
@@ -19,14 +19,14 @@ allprojects {
     group = "io.violabs"
 
     tasks.withType<JavaCompile> {
-        sourceCompatibility = JavaVersion.VERSION_17.majorVersion
-        targetCompatibility = JavaVersion.VERSION_17.majorVersion
+        sourceCompatibility = JavaVersion.VERSION_21.majorVersion
+        targetCompatibility = JavaVersion.VERSION_21.majorVersion
     }
 
     tasks.withType<KotlinCompile> {
         compilerOptions.apply {
-            jvmTarget.set(JvmTarget.JVM_17)
-            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget.set(JvmTarget.JVM_21)
+            freeCompilerArgs.set(listOf("-Xjsr305=strict"))
         }
     }
 }
