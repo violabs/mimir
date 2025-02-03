@@ -8,9 +8,13 @@ class OllamaTestStartupPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         target.tasks.register<PullOnStartupTask>("pullOnStartup") {
-            group = "setup"
-            useCustomUrl = true
-            apiUrl = "http://localhost:11435/api/pull"
+            port = 11435
+            model = "nomic-embed-text:latest"
+        }
+
+        target.tasks.register<DeleteModelTask>("deleteModel") {
+            port = 11435
+            model = "nomic-embed-text:latest"
         }
     }
 }

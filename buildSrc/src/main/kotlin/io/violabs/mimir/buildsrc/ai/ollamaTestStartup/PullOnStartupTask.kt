@@ -3,32 +3,48 @@ package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-open class PullOnStartupTask : SendToRestApiTask() {
-    //http://mimir-ollama:11434/api/pull
-    //{\"name\":\"nomic-embed-text:latest\"}
+open class PullOnStartupTask : OllamaTask() {
     @Input
-    var model: String = "nomic-embed-text:latest"
+    var protocol: String = "http"
 
     @Input
-    var useCustomUrl: Boolean = false
+    var host: String = "localhost"
 
-    init {
-        if (!useCustomUrl && apiUrl != "localhost:8080") {
-            logger.warn("Overriding provided url. provided: $apiUrl, default: localhost:11434/api/pull")
-            apiUrl = "http://localhost:11434/api/pull"
-        }
-    }
+    @Input
+    var port: Int = 11434
+
+    @Input
+    override var model: String? = null
 
     @TaskAction
     fun pullOnStartup() {
-        val json = """
-            {"name": "$model"}
-        """.trimIndent()
+        logger.debug("Pulling model. name: $model")
 
-        logger.debug("Pulling model")
+        val apiUrl = "$protocol://$host:$port/api/pull"
 
-        super.content = json
+        val httpManager = HttpManager.instance()
 
-        super.sendToRestApi()
+        httpManager.post(this) {
+            url = apiUrl
+            body = modelJson()
+        }
     }
+
+    //{
+    //            "name": "nomic-embed-text:latest",
+    //            "model": "nomic-embed-text:latest",
+    //            "modified_at": "2025-02-03T03:04:31.235356003Z",
+    //            "size": 274302450,
+    //            "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    //            "details": {
+    //                "parent_model": "",
+    //                "format": "gguf",
+    //                "family": "nomic-bert",
+    //                "families": [
+    //                    "nomic-bert"
+    //                ],
+    //                "parameter_size": "137M",
+    //                "quantization_level": "F16"
+    //            }
+    //        }
 }

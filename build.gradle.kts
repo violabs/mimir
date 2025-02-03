@@ -19,13 +19,13 @@ allprojects {
     group = "io.violabs"
 
     tasks.withType<JavaCompile> {
-        sourceCompatibility = JavaVersion.VERSION_21.majorVersion
-        targetCompatibility = JavaVersion.VERSION_21.majorVersion
+        sourceCompatibility = JavaVersion.VERSION_17.majorVersion
+        targetCompatibility = JavaVersion.VERSION_17.majorVersion
     }
 
     tasks.withType<KotlinCompile> {
         compilerOptions.apply {
-            jvmTarget.set(JvmTarget.JVM_21)
+            jvmTarget.set(JvmTarget.JVM_17)
             freeCompilerArgs.set(listOf("-Xjsr305=strict"))
         }
     }
