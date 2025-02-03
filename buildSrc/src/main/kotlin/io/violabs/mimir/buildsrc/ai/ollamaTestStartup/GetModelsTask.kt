@@ -22,7 +22,8 @@ open class GetModelsTask : DefaultTask() {
 
         HttpManager
             .instance()
-            .get<List<OllamaTag>>(this) { url = apiUrl }
+            .get<ModelResponse>(this) { url = apiUrl }
+            ?.models
             ?.forEach { logger.lifecycle("model: $it") }
     }
 }

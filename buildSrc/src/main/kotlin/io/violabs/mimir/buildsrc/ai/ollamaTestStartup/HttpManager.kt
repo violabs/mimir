@@ -10,15 +10,21 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 import org.gradle.api.Task
 
+/**
+ * A class to manage the various REST calls. The creation of this
+ * class is restricted to a singleton.
+ */
 class HttpManager private constructor(clientOverride: HttpClient? = null) {
     val client: HttpClient = clientOverride ?: HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
                 isLenient = true
+                ignoreUnknownKeys = true
             })
         }
         install(Logging) {
@@ -72,12 +78,17 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
+    /**
+     * Technically only used in the caller methods, but must be public due
+     * to the reification.
+     */
     fun <T> Task.tryCall(
         bodyExtractor: suspend HttpResponse.() -> T,
+        timeoutMs: Long = 5000,
         clientProvider: suspend HttpClient.() -> HttpResponse,
     ): T? = runBlocking {
         try {
-            val response: HttpResponse = clientProvider(client)
+            val response: HttpResponse = withTimeout(timeoutMs) { clientProvider(client) }
             logger.lifecycle("Response: $response")
             bodyExtractor.invoke(response)
         } catch (e: Exception) {

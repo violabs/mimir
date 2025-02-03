@@ -20,31 +20,24 @@ open class PullOnStartupTask : OllamaModelTask() {
     fun pullOnStartup() {
         logger.debug("Pulling model. name: $model")
 
-        val apiUrl = "$protocol://$host:$port/api/pull"
+        val pullApiUrl = "$protocol://$host:$port/api/pull"
 
         val httpManager = HttpManager.instance()
 
         httpManager.post<Unit>(this) {
-            url = apiUrl
+            url = pullApiUrl
             body = modelJson()
         }
-    }
 
-    //{
-    //            "name": "nomic-embed-text:latest",
-    //            "model": "nomic-embed-text:latest",
-    //            "modified_at": "2025-02-03T03:04:31.235356003Z",
-    //            "size": 274302450,
-    //            "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
-    //            "details": {
-    //                "parent_model": "",
-    //                "format": "gguf",
-    //                "family": "nomic-bert",
-    //                "families": [
-    //                    "nomic-bert"
-    //                ],
-    //                "parameter_size": "137M",
-    //                "quantization_level": "F16"
-    //            }
-    //        }
+        val getApiUrl = "$protocol://$host:$port/api/tags"
+
+        val modelFound = httpManager
+            .get<ModelResponse>(this) { url = getApiUrl }
+            ?.models
+            ?.onEach { println(it) }
+            ?.any { it.model == model }
+            ?: false
+
+        if (!modelFound) throw OllamaException("Unable to pull model: $model")
+    }
 }
