@@ -1,6 +1,7 @@
 package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
@@ -13,7 +14,7 @@ import kotlinx.serialization.json.Json
 import org.gradle.api.Task
 
 class HttpManager private constructor(clientOverride: HttpClient? = null) {
-    private val client: HttpClient = clientOverride ?: HttpClient(CIO) {
+    val client: HttpClient = clientOverride ?: HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
@@ -25,7 +26,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
-    fun post(task: Task, builderScope: ProviderHttpBuilder.() -> Unit) = with(task) {
+    inline fun <reified T> post(task: Task, builderScope: ProviderHttpBuilder.() -> Unit): T? = with(task) {
         val builder = ProviderHttpBuilder().apply(builderScope)
 
         val (url, body) = builder
@@ -34,7 +35,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         requireNotNull(body) { "Body must not be null." }
 
         logger.debug("Starting POST. apiUrl: $url, body: $body")
-        tryCall {
+        return tryCall({ body<T>() }) {
             client.post(url) {
                 contentType(ContentType.Application.Json)
                 setBody(body)
@@ -42,7 +43,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
-    fun get(task: Task, builderScope: BasicHttpBuilder.() -> Unit): HttpResponse? = with(task) {
+    inline fun <reified T> get(task: Task, builderScope: BasicHttpBuilder.() -> Unit): T? = with(task) {
         val builder = BasicHttpBuilder().apply(builderScope)
 
         val (url) = builder
@@ -50,12 +51,12 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         requireNotNull(url) { "URL must not be null." }
 
         logger.debug("Starting GET. apiUrl: $url")
-        return tryCall {
+        return tryCall({ body<T>() }) {
             client.get(url) { contentType(ContentType.Application.Json) }
         }
     }
 
-    fun delete(task: Task, builderScope: ProviderHttpBuilder.() -> Unit) = with(task) {
+    inline fun <reified T> delete(task: Task, builderScope: ProviderHttpBuilder.() -> Unit) = with(task) {
         val builder = ProviderHttpBuilder().apply(builderScope)
 
         val (url, body) = builder
@@ -63,7 +64,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         requireNotNull(url) { "URL must not be null." }
 
         logger.debug("Starting DELETE. apiUrl: $url, body: $body")
-        tryCall {
+        tryCall({ body<T>() }) {
             client.delete(url) {
                 contentType(ContentType.Application.Json)
                 setBody(body)
@@ -71,11 +72,14 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
-    private fun Task.tryCall(clientProvider: suspend HttpClient.() -> HttpResponse): HttpResponse? = runBlocking {
+    fun <T> Task.tryCall(
+        bodyExtractor: suspend HttpResponse.() -> T,
+        clientProvider: suspend HttpClient.() -> HttpResponse,
+    ): T? = runBlocking {
         try {
             val response: HttpResponse = clientProvider(client)
             logger.lifecycle("Response: $response")
-            response
+            bodyExtractor.invoke(response)
         } catch (e: Exception) {
             logger.error("Error sending request: ${e.message}")
             e.printStackTrace()

@@ -3,7 +3,7 @@ package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-open class PullOnStartupTask : OllamaTask() {
+open class PullOnStartupTask : OllamaModelTask() {
     @Input
     var protocol: String = "http"
 
@@ -24,7 +24,7 @@ open class PullOnStartupTask : OllamaTask() {
 
         val httpManager = HttpManager.instance()
 
-        httpManager.post(this) {
+        httpManager.post<Unit>(this) {
             url = apiUrl
             body = modelJson()
         }

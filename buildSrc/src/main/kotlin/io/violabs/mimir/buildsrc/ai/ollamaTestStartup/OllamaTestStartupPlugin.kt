@@ -12,6 +12,10 @@ class OllamaTestStartupPlugin : Plugin<Project> {
             model = "nomic-embed-text:latest"
         }
 
+        target.tasks.register<GetModelsTask>("getModels") {
+            port = 11435
+        }
+
         target.tasks.register<DeleteModelTask>("deleteModel") {
             port = 11435
             model = "nomic-embed-text:latest"

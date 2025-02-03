@@ -3,7 +3,7 @@ package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 
-abstract class OllamaTask : DefaultTask() {
+abstract class OllamaModelTask : DefaultTask() {
     @get:Input
     abstract var model: String?
 

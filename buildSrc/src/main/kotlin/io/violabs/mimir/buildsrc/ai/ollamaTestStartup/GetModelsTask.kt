@@ -1,9 +1,10 @@
 package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-open class GetModelsTask : OllamaTask() {
+open class GetModelsTask : DefaultTask() {
     @Input
     var protocol: String = "http"
 
@@ -13,17 +14,15 @@ open class GetModelsTask : OllamaTask() {
     @Input
     var port: Int = 11434
 
-    override var model: String? = null
-
     @TaskAction
-    fun deleteModel() {
+    fun getModels() {
         logger.debug("Getting models.")
 
         val apiUrl = "$protocol://$host:$port/api/tags"
 
-        HttpManager.instance().delete(this) {
-            url = apiUrl
-            body = modelJson()
-        }
+        HttpManager
+            .instance()
+            .get<List<OllamaTag>>(this) { url = apiUrl }
+            ?.forEach { logger.lifecycle("model: $it") }
     }
 }

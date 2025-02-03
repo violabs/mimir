@@ -3,7 +3,7 @@ package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-open class DeleteModelTask : OllamaTask() {
+open class DeleteModelTask : OllamaModelTask() {
     @Input
     var protocol: String = "http"
 
@@ -22,7 +22,7 @@ open class DeleteModelTask : OllamaTask() {
 
         val apiUrl = "$protocol://$host:$port/api/delete"
 
-        HttpManager.instance().delete(this) {
+        HttpManager.instance().delete<Unit>(this) {
             url = apiUrl
             body = modelJson()
         }
