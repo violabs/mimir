@@ -1,5 +1,6 @@
 package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 
+import kotlinx.coroutines.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
@@ -16,14 +17,18 @@ open class GetModelsTask : DefaultTask() {
 
     @TaskAction
     fun getModels() {
-        logger.debug("Getting models.")
+        logger.info("Getting models.")
 
         val apiUrl = "$protocol://$host:$port/api/tags"
 
-        HttpManager
-            .instance()
-            .get<ModelResponse>(this) { url = apiUrl }
-            ?.models
-            ?.forEach { logger.lifecycle("model: $it") }
+        val self = this
+
+        runBlocking {
+            HttpManager
+                .instance()
+                .get<ModelResponse>(self) { url = apiUrl }
+                ?.models
+                ?.forEach { logger.lifecycle("model: $it") }
+        }
     }
 }

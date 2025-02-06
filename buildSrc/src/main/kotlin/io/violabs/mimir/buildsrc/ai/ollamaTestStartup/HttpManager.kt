@@ -9,7 +9,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 import org.gradle.api.Task
@@ -32,7 +31,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
-    inline fun <reified T> post(task: Task, builderScope: ProviderHttpBuilder.() -> Unit): T? = with(task) {
+    suspend inline fun <reified T> post(task: Task, builderScope: ProviderHttpBuilder.() -> Unit): T? = with(task) {
         val builder = ProviderHttpBuilder().apply(builderScope)
 
         val (url, body) = builder
@@ -49,7 +48,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
-    inline fun <reified T> get(task: Task, builderScope: BasicHttpBuilder.() -> Unit): T? = with(task) {
+    suspend inline fun <reified T> get(task: Task, builderScope: BasicHttpBuilder.() -> Unit): T? = with(task) {
         val builder = BasicHttpBuilder().apply(builderScope)
 
         val (url) = builder
@@ -62,7 +61,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
-    inline fun <reified T> delete(task: Task, builderScope: ProviderHttpBuilder.() -> Unit) = with(task) {
+    suspend inline fun <reified T> delete(task: Task, builderScope: ProviderHttpBuilder.() -> Unit) = with(task) {
         val builder = ProviderHttpBuilder().apply(builderScope)
 
         val (url, body) = builder
@@ -82,23 +81,21 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
      * Technically only used in the caller methods, but must be public due
      * to the reification.
      */
-    fun <T> Task.tryCall(
+    suspend fun <T> Task.tryCall(
         bodyExtractor: suspend HttpResponse.() -> T,
         timeoutMs: Long = 5000,
         clientProvider: suspend HttpClient.() -> HttpResponse,
-    ): T? = runBlocking {
-        try {
-            val response: HttpResponse = withTimeout(timeoutMs) { clientProvider(client) }
-            logger.lifecycle("Response: $response")
-            bodyExtractor.invoke(response)
-        } catch (e: Exception) {
-            logger.error("Error sending request: ${e.message}")
-            e.printStackTrace()
-            null
-        } finally {
-            client.close()
-            logger.debug("Completed call.")
-        }
+    ): T? = try {
+        val response: HttpResponse = withTimeout(timeoutMs) { clientProvider(client) }
+        logger.lifecycle("Response: $response")
+        bodyExtractor.invoke(response)
+    } catch (e: Exception) {
+        logger.error("Error sending request: ${e.message}")
+        e.printStackTrace()
+        null
+    } finally {
+        client.close()
+        logger.debug("Completed call.")
     }
 
     /**

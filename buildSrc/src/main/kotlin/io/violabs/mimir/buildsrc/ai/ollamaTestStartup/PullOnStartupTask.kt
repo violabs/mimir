@@ -1,5 +1,6 @@
 package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 
+import kotlinx.coroutines.runBlocking
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
@@ -18,26 +19,51 @@ open class PullOnStartupTask : OllamaModelTask() {
 
     @TaskAction
     fun pullOnStartup() {
-        logger.debug("Pulling model. name: $model")
-
-        val pullApiUrl = "$protocol://$host:$port/api/pull"
+        requireNotNull(model) { "Model name must be provided" }
+        logger.lifecycle("Checking if model exists: $model")
 
         val httpManager = HttpManager.instance()
-
-        httpManager.post<Unit>(this) {
-            url = pullApiUrl
-            body = modelJson()
-        }
-
         val getApiUrl = "$protocol://$host:$port/api/tags"
 
-        val modelFound = httpManager
-            .get<ModelResponse>(this) { url = getApiUrl }
-            ?.models
-            ?.onEach { println(it) }
-            ?.any { it.model == model }
-            ?: false
+        // First check if model exists
+        val self = this
 
-        if (!modelFound) throw OllamaException("Unable to pull model: $model")
+        runBlocking {
+            val modelExists = httpManager
+                .get<ModelResponse>(self) { url = getApiUrl }
+                ?.models
+                ?.any { it.model == model }
+                ?: false
+
+
+            if (modelExists) {
+                logger.lifecycle("Model already exists: $model")
+                return@runBlocking
+            }
+
+            logger.lifecycle("Pulling model: $model")
+            val pullApiUrl = "$protocol://$host:$port/api/pull"
+
+            try {
+                httpManager.post<Unit>(self) {
+                    url = pullApiUrl
+                    body = modelJson()
+                }
+
+                // Verify model was pulled
+                val modelPulled = httpManager
+                    .get<ModelResponse>(self) { url = getApiUrl }
+                    ?.models
+                    ?.any { it.model == model }
+                    ?: false
+
+                if (!modelPulled) throw OllamaException("Model pull completed but model not found: $model")
+
+                logger.lifecycle("Successfully pulled model: $model")
+            } catch (e: Exception) {
+                logger.error("Failed to pull model: $model")
+                throw OllamaException("Failed to pull model: $model", e)
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
 
+import kotlinx.coroutines.runBlocking
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
@@ -22,9 +23,13 @@ open class DeleteModelTask : OllamaModelTask() {
 
         val apiUrl = "$protocol://$host:$port/api/delete"
 
-        HttpManager.instance().delete<Unit>(this) {
-            url = apiUrl
-            body = modelJson()
+        val self = this
+
+        runBlocking {
+            HttpManager.instance().delete<Unit>(self) {
+                url = apiUrl
+                body = modelJson()
+            }
         }
     }
 }
