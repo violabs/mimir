@@ -4,7 +4,7 @@ plugins {
 
     kotlin("jvm")
     kotlin("plugin.spring")
-    id("com.avast.gradle.docker-compose") version "0.17.6"
+    id("com.avast.gradle.docker-compose") version "0.17.12"
 
     id("io.violabs.plugins.ai.ollama-test-startup")
 }
@@ -36,18 +36,20 @@ dependencies {
 dockerCompose {
     val testDocker = nested("test")
     testDocker.useComposeFiles.set(listOf("./docker/docker-compose.yml"))
-    testDocker.buildAdditionalArgs.add("--profile=test")
+    testDocker.composeAdditionalArgs.add("--profile=test")
+    testDocker.isRequiredBy(tasks.test)
 
     val e2eDocker = nested("e2e")
     e2eDocker.useComposeFiles.set(listOf("./docker/docker-compose.yml"))
-    e2eDocker.buildAdditionalArgs.add("--profile=e2e")
+    e2eDocker.composeAdditionalArgs.add("--profile=e2e")
 }
 
 tasks.withType<Test> {
-    dockerCompose.isRequiredBy(this)
-    dependsOn(tasks.pullOnStartup)
-
     systemProperty("spring.profiles.active", "test")
 
     useJUnitPlatform()
+}
+
+tasks.composeUp {
+    finalizedBy(tasks.pullOnStartup)
 }

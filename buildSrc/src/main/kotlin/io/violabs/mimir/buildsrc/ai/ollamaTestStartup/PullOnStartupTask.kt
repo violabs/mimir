@@ -24,7 +24,6 @@ open class PullOnStartupTask : OllamaModelTask() {
 
         val httpManager = HttpManager.instance()
         val getApiUrl = "$protocol://$host:$port/api/tags"
-        val pullApiUrl = "$protocol://$host:$port/api/pull"
         val self = this
 
         try {
