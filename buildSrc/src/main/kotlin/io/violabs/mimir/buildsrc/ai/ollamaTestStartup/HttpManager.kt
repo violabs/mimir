@@ -29,6 +29,15 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         install(Logging) {
             level = LogLevel.BODY
         }
+        engine {
+            requestTimeout = 0 // No timeout, we'll handle it with withTimeout
+            endpoint {
+                connectTimeout = 5000
+                keepAliveTime = 5000
+                maxConnectionsCount = 1000
+                pipelineMaxSize = 20
+            }
+        }
     }
 
     suspend inline fun <reified T> post(
@@ -90,9 +99,21 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         timeoutMs: Long = 5000,
         clientProvider: suspend HttpClient.() -> HttpResponse,
     ): T? = try {
-        val response: HttpResponse = withTimeout(timeoutMs) { clientProvider(client) }
+        val response: HttpResponse = withTimeout(timeoutMs) {
+            try {
+                clientProvider(client)
+            } catch (e: Exception) {
+                logger.error("Error in client request: ${e.message}")
+                throw e
+            }
+        }
         logger.lifecycle("Response: $response")
-        bodyExtractor.invoke(response)
+        try {
+            bodyExtractor.invoke(response)
+        } catch (e: Exception) {
+            logger.error("Error extracting response body: ${e.message}")
+            throw e
+        }
     } catch (e: Exception) {
         logger.error("Error sending request: ${e.message}")
         e.printStackTrace()
