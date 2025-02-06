@@ -23,7 +23,8 @@ open class PullOnStartupTask : OllamaModelTask() {
         logger.lifecycle("Checking if model exists: $model")
 
         val httpManager = HttpManager.instance()
-        val getApiUrl = "$protocol://$host:$port/api/tags"
+        try {
+            val getApiUrl = "$protocol://$host:$port/api/tags"
 
         // First check if model exists
         val self = this
@@ -64,6 +65,9 @@ open class PullOnStartupTask : OllamaModelTask() {
                 logger.error("Failed to pull model: $model")
                 throw OllamaException("Failed to pull model: $model", e)
             }
+        }
+        } finally {
+            httpManager.client.close()
         }
     }
 }

@@ -93,8 +93,6 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         logger.error("Error sending request: ${e.message}")
         e.printStackTrace()
         null
-    } finally {
-        client.close()
         logger.debug("Completed call.")
     }
 
