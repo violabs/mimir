@@ -31,7 +31,11 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         }
     }
 
-    suspend inline fun <reified T> post(task: Task, builderScope: ProviderHttpBuilder.() -> Unit): T? = with(task) {
+    suspend inline fun <reified T> post(
+        task: Task,
+        timeoutMs: Long = 5000,
+        builderScope: ProviderHttpBuilder.() -> Unit
+    ): T? = with(task) {
         val builder = ProviderHttpBuilder().apply(builderScope)
 
         val (url, body) = builder
@@ -40,7 +44,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         requireNotNull(body) { "Body must not be null." }
 
         logger.debug("Starting POST. apiUrl: $url, body: $body")
-        return tryCall({ body<T>() }) {
+        return tryCall({ body<T>() }, timeoutMs) {
             client.post(url) {
                 contentType(ContentType.Application.Json)
                 setBody(body)
@@ -92,10 +96,8 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
     } catch (e: Exception) {
         logger.error("Error sending request: ${e.message}")
         e.printStackTrace()
-        null
-    } finally {
-        client.close()
         logger.debug("Completed call.")
+        null
     }
 
     /**

@@ -23,47 +23,51 @@ open class PullOnStartupTask : OllamaModelTask() {
         logger.lifecycle("Checking if model exists: $model")
 
         val httpManager = HttpManager.instance()
-        val getApiUrl = "$protocol://$host:$port/api/tags"
+        try {
+            val getApiUrl = "$protocol://$host:$port/api/tags"
 
-        // First check if model exists
-        val self = this
+            // First check if model exists
+            val self = this
 
-        runBlocking {
-            val modelExists = httpManager
-                .get<ModelResponse>(self) { url = getApiUrl }
-                ?.models
-                ?.any { it.model == model }
-                ?: false
-
-
-            if (modelExists) {
-                logger.lifecycle("Model already exists: $model")
-                return@runBlocking
-            }
-
-            logger.lifecycle("Pulling model: $model")
-            val pullApiUrl = "$protocol://$host:$port/api/pull"
-
-            try {
-                httpManager.post<Unit>(self) {
-                    url = pullApiUrl
-                    body = modelJson()
-                }
-
-                // Verify model was pulled
-                val modelPulled = httpManager
+            runBlocking {
+                val modelExists = httpManager
                     .get<ModelResponse>(self) { url = getApiUrl }
                     ?.models
                     ?.any { it.model == model }
                     ?: false
 
-                if (!modelPulled) throw OllamaException("Model pull completed but model not found: $model")
 
-                logger.lifecycle("Successfully pulled model: $model")
-            } catch (e: Exception) {
-                logger.error("Failed to pull model: $model")
-                throw OllamaException("Failed to pull model: $model", e)
+                if (modelExists) {
+                    logger.lifecycle("Model already exists: $model")
+                    return@runBlocking
+                }
+
+                logger.lifecycle("Pulling model: $model")
+                val pullApiUrl = "$protocol://$host:$port/api/pull"
+
+                try {
+                    httpManager.post<Unit>(self, 300000) { // 5 minutes timeout for pull
+                        url = pullApiUrl
+                        body = modelJson()
+                    }
+
+                    // Verify model was pulled
+                    val modelPulled = httpManager
+                        .get<ModelResponse>(self) { url = getApiUrl }
+                        ?.models
+                        ?.any { it.model == model }
+                        ?: false
+
+                    if (!modelPulled) throw OllamaException("Model pull completed but model not found: $model")
+
+                    logger.lifecycle("Successfully pulled model: $model")
+                } catch (e: Exception) {
+                    logger.error("Failed to pull model: $model")
+                    throw OllamaException("Failed to pull model: $model", e)
+                }
             }
+        } finally {
+            httpManager.client.close()
         }
     }
 }
