@@ -29,9 +29,22 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         install(Logging) {
             level = LogLevel.BODY
         }
+        engine {
+            requestTimeout = 0 // No timeout, we'll handle it with withTimeout
+            endpoint {
+                connectTimeout = 5000
+                keepAliveTime = 5000
+                maxConnectionsCount = 1000
+                pipelineMaxSize = 20
+            }
+        }
     }
 
-    suspend inline fun <reified T> post(task: Task, builderScope: ProviderHttpBuilder.() -> Unit): T? = with(task) {
+    suspend inline fun <reified T> post(
+        task: Task,
+        timeoutMs: Long = 5000,
+        builderScope: ProviderHttpBuilder.() -> Unit
+    ): T? = with(task) {
         val builder = ProviderHttpBuilder().apply(builderScope)
 
         val (url, body) = builder
@@ -40,7 +53,7 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         requireNotNull(body) { "Body must not be null." }
 
         logger.debug("Starting POST. apiUrl: $url, body: $body")
-        return tryCall({ body<T>() }) {
+        return tryCall({ body<T>() }, timeoutMs) {
             client.post(url) {
                 contentType(ContentType.Application.Json)
                 setBody(body)
@@ -86,16 +99,26 @@ class HttpManager private constructor(clientOverride: HttpClient? = null) {
         timeoutMs: Long = 5000,
         clientProvider: suspend HttpClient.() -> HttpResponse,
     ): T? = try {
-        val response: HttpResponse = withTimeout(timeoutMs) { clientProvider(client) }
+        val response: HttpResponse = withTimeout(timeoutMs) {
+            try {
+                clientProvider(client)
+            } catch (e: Exception) {
+                logger.error("Error in client request: ${e.message}")
+                throw e
+            }
+        }
         logger.lifecycle("Response: $response")
-        bodyExtractor.invoke(response)
+        try {
+            bodyExtractor.invoke(response)
+        } catch (e: Exception) {
+            logger.error("Error extracting response body: ${e.message}")
+            throw e
+        }
     } catch (e: Exception) {
         logger.error("Error sending request: ${e.message}")
         e.printStackTrace()
-        null
-    } finally {
-        client.close()
         logger.debug("Completed call.")
+        null
     }
 
     /**
