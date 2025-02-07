@@ -30,9 +30,7 @@ jobs:
       - name: Determine affected modules
         id: set-matrix
         run: |
-          MODULES=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | \
-            awk -F'/' '{print $1}' | grep -v '^$' | sort -u | \
-            jq -R . | jq -s . || echo '[]')
+          MODULES=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | sed 's/\\/\//g' | tr ' ' '\n' | cut -d'/' -f1 | sort -u | jq -R -s 'split("\n")[:-1]')
           echo "matrix=${MODULES}" >> $GITHUB_OUTPUT
 
   module-tests:
