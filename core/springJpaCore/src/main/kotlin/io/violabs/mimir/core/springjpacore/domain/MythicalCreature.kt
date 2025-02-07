@@ -1,4 +1,4 @@
-package io.violabs.mimir.database.postgres.domain
+package io.violabs.mimir.core.springjpacore.domain
 
 import io.violabs.mimir.core.defaultHashCode
 import io.violabs.mimir.core.springjpacore.DbEntity

@@ -1,9 +1,9 @@
 package io.violabs.mimir.database.postgres.services
 
-import io.violabs.mimir.database.postgres.services.MythicalCreatureRepository
-import io.violabs.mimir.database.postgres.services.MythicalCreatureService
-import io.violabs.postgres.domain.MythicalCreature
-import io.violabs.springjpacore.ServiceIntegrationTestHarness
+import io.violabs.mimir.core.springjpacore.MythicalCreatureRepository
+import io.violabs.mimir.core.springjpacore.MythicalCreatureService
+import io.violabs.mimir.core.springjpacore.ServiceIntegrationTestHarness
+import io.violabs.mimir.core.springjpacore.domain.MythicalCreature
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

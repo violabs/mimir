@@ -1,23 +1,20 @@
-version: '3.8'
+name: 'mimir-simple-kafka'
+
 services:
   zookeeper-0:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.8.0
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "22181:2181"
 
   zookeeper-1:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.8.0
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_CLIENT_PORT: 2182
       ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "32181:2181"
 
   kafka-0:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.8.0
     depends_on:
       - zookeeper-0
       - zookeeper-1
@@ -25,14 +22,14 @@ services:
       - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-0:2181,zookeeper-1:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-0:2181,zookeeper-1:2182
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-0:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   kafka-1:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.8.0
     depends_on:
       - zookeeper-0
       - zookeeper-1
@@ -40,14 +37,14 @@ services:
       - "39092:39092"
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-0:2181,zookeeper-1:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-0:2181,zookeeper-1:2182
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:39092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest
+    image: provectuslabs/kafka-ui:v0.7.2
     container_name: kafka-ui
     depends_on:
       - zookeeper-0

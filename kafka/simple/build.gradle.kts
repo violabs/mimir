@@ -3,7 +3,6 @@ plugins {
 
     kotlin("jvm")
     kotlin("plugin.spring")
-    id("com.avast.gradle.docker-compose") version "0.17.6"
 }
 
 dependencies {
@@ -26,13 +25,7 @@ repositories {
     mavenCentral()
 }
 
-dockerCompose {
-  useComposeFiles.set(listOf("./docker/docker-compose.yml"))
-}
-
 tasks.withType<Test> {
-  dockerCompose.isRequiredBy(this)
-
   systemProperty("spring.profiles.active", "test")
 
   useJUnitPlatform()

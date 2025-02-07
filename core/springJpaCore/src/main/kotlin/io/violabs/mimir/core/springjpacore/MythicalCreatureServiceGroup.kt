@@ -1,7 +1,6 @@
-package io.violabs.mimir.database.mysql.services
+package io.violabs.mimir.core.springjpacore
 
-import io.violabs.mimir.core.springjpacore.DefaultService
-import io.violabs.mimir.database.mysql.domain.MythicalCreature
+import io.violabs.mimir.core.springjpacore.domain.MythicalCreature
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository

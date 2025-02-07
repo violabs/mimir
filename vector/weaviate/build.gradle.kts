@@ -4,7 +4,6 @@ plugins {
 
     kotlin("jvm")
     kotlin("plugin.spring")
-    id("com.avast.gradle.docker-compose") version "0.17.12"
 
     id("io.violabs.plugins.ai.ollama-test-startup")
 }
@@ -26,7 +25,6 @@ dependencies {
     implementation("org.springframework.ai:spring-ai-ollama-spring-boot-starter")
     implementation("org.springframework.ai:spring-ai-weaviate-store")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
-    implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
     implementation(platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT"))
 
