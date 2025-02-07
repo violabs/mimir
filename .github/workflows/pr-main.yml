@@ -1,0 +1,102 @@
+name: Module PR Tests
+run-name: PR Tests for modules by ${{ github.actor }}
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    types: [opened, synchronize, reopened]
+
+jobs:
+  determine-modules:
+    name: Determine Changed Modules
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v43
+        with:
+          files: |
+            **/src/**
+            **/build.gradle.kts
+            settings.gradle.kts
+
+      - name: Determine affected modules
+        id: set-matrix
+        run: |
+          MODULES=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | \
+            grep -o '^[^/]*' | sort -u | grep -v '^$' | \
+            jq -R . | jq -s . || echo '[]')
+          echo "matrix=${MODULES}" >> $GITHUB_OUTPUT
+
+  module-tests:
+    needs: determine-modules
+    if: needs.determine-modules.outputs.matrix != '[]'
+    name: Test ${{ matrix.module }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: ${{ fromJson(needs.determine-modules.outputs.matrix) }}
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout code
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle
+            build
+            */build
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - uses: actions/setup-java@v4
+        name: Set up JDK 21
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run tests for ${{ matrix.module }}
+        run: ./gradlew ${{ matrix.module }}:test ${{ matrix.module }}:build -Pkover koverXmlReport --info
+        continue-on-error: false
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ matrix.module }}
+          path: ${{ matrix.module }}/build/reports/
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ matrix.module }}
+          path: ${{ matrix.module }}/build/reports/kover/
+
+      - name: Add coverage report to PR
+        uses: mi-kas/kover-report@v1
+        with:
+          path: |
+            ${{ github.workspace }}/${{ matrix.module }}/build/reports/kover/report.xml
+          title: Code Coverage - ${{ matrix.module }}
+          update-comment: true
+          min-coverage-overall: 40
+          min-coverage-changed-files: 40
+          coverage-counter-type: LINE
