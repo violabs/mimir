@@ -1,8 +1,8 @@
-package io.violabs.mimir.database.postgres.domain
+package io.violabs.mimir.core.springJpaCore.domain
 
 import io.violabs.mimir.core.defaultHashCode
-import io.violabs.mimir.core.springjpacore.DbEntity
-import io.violabs.mimir.core.springjpacore.PropertyMap
+import io.violabs.mimir.core.springJpaCore.DbEntity
+import io.violabs.mimir.core.springJpaCore.PropertyMap
 import jakarta.persistence.*
 import java.util.UUID
 

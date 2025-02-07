@@ -1,4 +1,4 @@
-package io.violabs.mimir.core.springjpacore
+package io.violabs.mimir.core.springJpaCore
 
 import io.violabs.mimir.core.SimpleTestHarness
 import org.springframework.data.jpa.repository.JpaRepository

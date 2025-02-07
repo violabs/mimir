@@ -1,8 +1,6 @@
-package io.violabs.mimir.database.postgres.controllers
+package io.violabs.mimir.core.springJpaCore
 
-import io.violabs.mimir.database.postgres.services.MythicalCreatureService
-import io.violabs.mimir.core.springjpacore.DefaultController
-import io.violabs.mimir.database.postgres.domain.MythicalCreature
+import io.violabs.mimir.core.springJpaCore.domain.MythicalCreature
 import org.springframework.web.bind.annotation.*
 import java.util.*
 

@@ -4,7 +4,6 @@ plugins {
 
     kotlin("jvm")
     kotlin("plugin.spring")
-    id("com.avast.gradle.docker-compose") version "0.17.6"
 }
 
 dependencies {
@@ -19,7 +18,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
-    runtimeOnly("com.mysql:mysql-connector-j:8.3.0")
+    runtimeOnly("com.mysql:mysql-connector-j:9.0.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -29,7 +28,8 @@ repositories {
 }
 
 dockerCompose {
-    useComposeFiles.set(listOf("./docker/docker-compose.test.yml"))
+    useComposeFiles.set(listOf("./docker/docker-compose.yml"))
+    composeAdditionalArgs.add("--profile=test")
 }
 
 tasks.withType<Test> {

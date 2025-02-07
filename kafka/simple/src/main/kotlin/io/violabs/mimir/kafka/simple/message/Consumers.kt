@@ -2,7 +2,7 @@ package io.violabs.mimir.kafka.simple.message
 
 import io.violabs.mimir.kafka.simple.domain.God
 import io.violabs.mimir.kafka.simple.domain.Monster
-import mu.KLogging
+import mu.two.KLogging
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 import java.util.concurrent.CountDownLatch

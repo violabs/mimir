@@ -6,6 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4" apply false
     kotlin("jvm") version "2.0.20" apply false
     kotlin("plugin.spring") version "2.0.20" apply false
+    id("com.avast.gradle.docker-compose") version "0.17.12"
 }
 
 buildscript {
@@ -38,5 +39,6 @@ subprojects {
 
     apply {
         plugin("io.spring.dependency-management")
+        plugin("com.avast.gradle.docker-compose")
     }
 }
