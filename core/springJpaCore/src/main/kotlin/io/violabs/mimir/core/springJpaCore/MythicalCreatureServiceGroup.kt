@@ -1,6 +1,6 @@
-package io.violabs.mimir.core.springjpacore
+package io.violabs.mimir.core.springJpaCore
 
-import io.violabs.mimir.core.springjpacore.domain.MythicalCreature
+import io.violabs.mimir.core.springJpaCore.domain.MythicalCreature
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
