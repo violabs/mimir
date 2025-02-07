@@ -31,7 +31,7 @@ jobs:
         id: set-matrix
         run: |
           MODULES=$(echo '${{ steps.changed-files.outputs.all_changed_files }}' | \
-            grep -o '^[^/]*' | sort -u | grep -v '^$' | \
+            awk -F'/' '{print $1}' | grep -v '^$' | sort -u | \
             jq -R . | jq -s . || echo '[]')
           echo "matrix=${MODULES}" >> $GITHUB_OUTPUT
 
