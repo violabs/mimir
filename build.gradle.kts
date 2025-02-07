@@ -48,12 +48,6 @@ subprojects {
         plugin("org.jetbrains.dokka")
         plugin("org.jetbrains.kotlinx.kover")
     }
-    
-    // Configure Kover for each subproject
-    extensions.configure<kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension> {
-        // Disable default reports (we'll set up module-specific ones)
-        disable()
-    }
 }
 
 fun Project.sharedRepositories() {
