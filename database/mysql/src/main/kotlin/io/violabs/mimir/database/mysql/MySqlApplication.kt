@@ -1,13 +1,14 @@
 package io.violabs.mimir.database.mysql
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
-@SpringBootApplication
-@EnableJpaRepositories(basePackages = ["io.violabs.mimir.core.springJpaCore"])
-@ComponentScan(basePackages = ["io.violabs.mimir.core.springJpaCore", "io.violabs.mimir.database.mysql"])
+@SpringBootApplication(scanBasePackages = ["io.violabs.mimir"])
+@EntityScan("io.violabs.mimir")
+@EnableJpaRepositories("io.violabs.mimir")
 class MySqlApplication
 
 fun main(args: Array<String>) {

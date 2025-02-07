@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: localuser
+    password: localpassword
+    url: jdbc:mysql://localhost:3306/simple
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
