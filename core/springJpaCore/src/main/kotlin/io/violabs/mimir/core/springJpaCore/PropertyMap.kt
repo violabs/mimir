@@ -1,4 +1,4 @@
-package io.violabs.mimir.core.springjpacore
+package io.violabs.mimir.core.springJpaCore
 
 typealias PropertyName = String
 typealias PropertyValue = Any?
