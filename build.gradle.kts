@@ -48,6 +48,12 @@ subprojects {
         plugin("org.jetbrains.dokka")
         plugin("org.jetbrains.kotlinx.kover")
     }
+    
+    // Configure Kover for each subproject
+    extensions.configure<kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension> {
+        // Disable default reports (we'll set up module-specific ones)
+        disable()
+    }
 }
 
 fun Project.sharedRepositories() {
@@ -56,4 +62,12 @@ fun Project.sharedRepositories() {
         maven { url = uri("https://repo.spring.io/milestone") }
         maven { url = uri("https://www.jetbrains.com/intellij-repository/releases") }
     }
+}
+
+// Task for aggregated coverage report
+tasks.register("koverMergedReport") {
+    group = "verification"
+    description = "Generates merged coverage report for all modules"
+    
+    dependsOn(subprojects.map { it.tasks.named("koverXmlReport") })
 }
