@@ -74,8 +74,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Run build for ${{ matrix.module }}
+        run: ./gradlew ${{ matrix.module }}:build -x test
+        continue-on-error: false
+
       - name: Run tests for ${{ matrix.module }}
-        run: ./gradlew ${{ matrix.module }}:test ${{ matrix.module }}:build -Pkover koverXmlReport --info
+        run: ./gradlew ${{ matrix.module }}:test -Pkover koverXmlReport --info
         continue-on-error: false
 
       - name: Upload test reports
