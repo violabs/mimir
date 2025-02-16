@@ -33,7 +33,7 @@ jobs:
           CHANGED_MODULES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | \
             awk -F'/' '{print $1}' | sort -u | jq -R -s 'split("\n")[:-1]')
 
-          if [ -z "$CHANGED_MODULES" ]; then
+          if [[ -z "$CHANGED_MODULES" || "$CHANGED_MODULES" == "[]" ]]; then
               echo "No module changes detected."
               echo "matrix=[]" >> $GITHUB_OUTPUT
               exit 0
@@ -45,7 +45,7 @@ jobs:
 
   module-tests:
     needs: determine-modules
-    if: needs.determine-modules.outputs.matrix != '[]'
+    if: needs.determine-modules.outputs.matrix != '[]'  # Ensures it doesn't run if no modules changed
     name: Test ${{ matrix.module }}
     runs-on: ubuntu-latest
     strategy:
