@@ -30,11 +30,17 @@ jobs:
       - name: Determine affected modules
         id: set-matrix
         run: |
-          MODULES=$(echo 'core/springJpaCore/src/main/kotlin/io/violabs/mimir/core/springJpaCore/.gitkeep' | \
-          sed 's/\\/\//g' | tr ' ' '\n' | cut -d'/' -f1 | sort -u | \
-          jq -R -s 'split("\n")[:-1]')
+          CHANGED_MODULES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | \
+            awk -F'/' '{print $1}' | sort -u | jq -R -s 'split("\n")[:-1]')
+
+          if [ -z "$CHANGED_MODULES" ]; then
+              echo "No module changes detected."
+              echo "matrix=[]" >> $GITHUB_OUTPUT
+              exit 0
+          fi
+
           echo "matrix<<EOF" >> $GITHUB_OUTPUT
-          echo "${MODULES}" >> $GITHUB_OUTPUT
+          echo "${CHANGED_MODULES}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
   module-tests:
