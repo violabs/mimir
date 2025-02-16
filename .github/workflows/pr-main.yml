@@ -30,11 +30,31 @@ jobs:
       - name: Determine affected modules
         id: set-matrix
         run: |
-          CHANGED_MODULES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | \
-            awk -F'/' '{print $1}' | sort -u | jq -R -s 'split("\n")[:-1]')
+          # Get changed files
+          CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
 
-          if [[ -z "$CHANGED_MODULES" || "$CHANGED_MODULES" == "[]" ]]; then
-              echo "No module changes detected."
+          # If build-related files changed, run all modules
+          if echo "$CHANGED_FILES" | grep -q -E "^(build.gradle.kts|settings.gradle.kts)$"; then
+            echo "Detected change in build scripts - running all modules."
+            MODULES=$(ls -d */ | awk -F'/' '{print $1}' | jq -R -s 'split("\n")[:-1]')
+            echo "matrix<<EOF" >> $GITHUB_OUTPUT
+            echo "${MODULES}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # If only .github or root files (excluding build scripts) changed, exit early
+          if echo "$CHANGED_FILES" | grep -q -v -E "^(.github/|build.gradle.kts|settings.gradle.kts|[^/]+/src/)"; then
+            echo "Detected only non-module root changes - skipping build."
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Detect changed modules
+          CHANGED_MODULES=$(echo "$CHANGED_FILES" | awk -F'/' '{print $1}' | sort -u | jq -R -s 'split("\n")[:-1]')
+
+          if [ -z "$CHANGED_MODULES" ] || [ "$CHANGED_MODULES" == "[]" ]; then
+              echo "No relevant module changes detected."
               echo "matrix=[]" >> $GITHUB_OUTPUT
               exit 0
           fi
@@ -45,7 +65,7 @@ jobs:
 
   module-tests:
     needs: determine-modules
-    if: needs.determine-modules.outputs.matrix != '[]'  # Ensures it doesn't run if no modules changed
+    if: needs.determine-modules.outputs.matrix != '[]'
     name: Test ${{ matrix.module }}
     runs-on: ubuntu-latest
     strategy:
