@@ -30,11 +30,35 @@ jobs:
       - name: Determine affected modules
         id: set-matrix
         run: |
-          MODULES=$(echo 'core/springJpaCore/src/main/kotlin/io/violabs/mimir/core/springJpaCore/.gitkeep' | \
-          sed 's/\\/\//g' | tr ' ' '\n' | cut -d'/' -f1 | sort -u | \
-          jq -R -s 'split("\n")[:-1]')
+          CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
+          
+          if echo "$CHANGED_FILES" | grep -q -E "^(build.gradle.kts|settings.gradle.kts)$"; then
+            echo "Detected change in build scripts - running all modules."
+            MODULES=$(ls -d */ | awk -F'/' '{print $1}' | jq -R -s 'split("\n")[:-1]')
+            echo "matrix<<EOF" >> $GITHUB_OUTPUT
+            echo "${MODULES}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          if echo "$CHANGED_FILES" | grep -q -v -E "^(.github/|build.gradle.kts|settings.gradle.kts|[^/]+/src/)"; then
+            echo "Detected only non-module root changes - skipping build."
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+            echo "**Skipped. No change.**" >> $GITHUB_STEP_SUMMARY  # ✅ Adds a visible UI summary
+            exit 0
+          fi
+          
+          CHANGED_MODULES=$(echo "$CHANGED_FILES" | awk -F'/' '{print $1}' | sort -u | jq -R -s 'split("\n")[:-1]')
+          
+          if [[ -z "$CHANGED_MODULES" || "$CHANGED_MODULES" == "[]" ]]; then
+              echo "No relevant module changes detected."
+              echo "matrix=[]" >> $GITHUB_OUTPUT
+              echo "**Skipped. No change.**" >> $GITHUB_STEP_SUMMARY  # ✅ Adds a visible UI summary
+              exit 0
+          fi
+          
           echo "matrix<<EOF" >> $GITHUB_OUTPUT
-          echo "${MODULES}" >> $GITHUB_OUTPUT
+          echo "${CHANGED_MODULES}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
   module-tests:
