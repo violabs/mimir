@@ -116,8 +116,11 @@ tasks.register("detectChangedModules") {
             }
             .toSet()
 
-        // ✅ Print valid JSON directly for GitHub Actions
-        println(changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]"))
+        // ✅ Ensure valid single-line JSON output
+        val jsonOutput = changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]")
+
+        // ✅ Correctly format for GitHub Actions output
+        println("MATRIX=$jsonOutput")
     }
 }
 
