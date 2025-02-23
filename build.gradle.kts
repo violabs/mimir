@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.ByteArrayOutputStream
 
 plugins {
     id("org.springframework.boot") version "3.2.4" apply false
@@ -70,5 +71,56 @@ tasks.register("printModules") {
     doLast {
         val modules = rootProject.subprojects.map { it.path.removePrefix(":") }
         modules.forEach { println(it) }
+    }
+}
+
+tasks.register("detectChangedModules") {
+    doLast {
+        val changedFiles = System.getenv("CHANGED_FILES")
+            ?.split(" ")
+            ?.filter { it.isNotBlank() }
+            ?: run {
+                // Run 'git diff' to detect changed files in the current PR/branch
+                val outputStream = ByteArrayOutputStream()
+                exec {
+                    commandLine("git", "diff", "--name-only", "origin/main...HEAD")
+                    standardOutput = outputStream
+                }
+
+                outputStream
+                    .toString()
+                    .trim()
+                    .split("\n")
+                    .filter { it.isNotBlank() }
+            }
+
+        if (changedFiles.isEmpty()) {
+            logger.lifecycle("matrix=[]")
+            return@doLast
+        }
+
+        // Convert Gradle's ":"-based module names to filesystem paths
+        val allModules = rootProject
+            .subprojects
+            .map { it.path.removePrefix(":").replace(":", "/") }
+            .sortedByDescending { it.length }
+            .toSet()
+
+        // Identify affected modules, considering submodules properly
+        val changedModules = changedFiles
+            .mapNotNull { file ->
+                allModules.find { module ->
+                    file.contains("$module/") || file.contains("$module\\") // Handles Unix & Windows paths
+                }
+            }
+            .toSet()
+
+        if (changedModules.isEmpty()) {
+            logger.lifecycle("matrix=[]")
+        } else {
+            logger.lifecycle("matrix<<EOF")
+            logger.lifecycle(changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]"))
+            logger.lifecycle("EOF")
+        }
     }
 }

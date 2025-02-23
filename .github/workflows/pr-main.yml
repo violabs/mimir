@@ -18,18 +18,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v43
-        with:
-          files: |
-            **/src/**
-            **/build.gradle.kts
-            settings.gradle.kts
-
       - name: Determine affected modules
         id: set-matrix
-        run: .github/scripts/detect_modules.sh "${{ steps.changed-files.outputs.all_changed_files }}"
+        run: ./gradlew -q detectChangedModules >> $GITHUB_OUTPUT
 
   module-tests:
     needs: determine-modules
