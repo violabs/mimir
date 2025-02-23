@@ -81,7 +81,6 @@ tasks.register("detectChangedModules") {
             ?.split(" ")
             ?.filter { it.isNotBlank() }
             ?: run {
-                // Run 'git diff' to detect changed files in the current PR/branch
                 val outputStream = ByteArrayOutputStream()
                 exec {
                     commandLine("git", "diff", "--name-only", "origin/main...HEAD")
@@ -96,7 +95,7 @@ tasks.register("detectChangedModules") {
             }
 
         if (changedFiles.isEmpty()) {
-            println("[]")  // ✅ Print an empty JSON array directly
+            println("""MATRIX={"modulePaths":[],"gradleModules":[]}""")  // ✅ Always return valid JSON
             return@doLast
         }
 
@@ -111,18 +110,19 @@ tasks.register("detectChangedModules") {
         val changedModules = changedFiles
             .mapNotNull { file ->
                 allModules.find { module ->
-                    file.startsWith("$module/") || file.startsWith("$module\\")  // ✅ Ensures submodules are detected
+                    file.startsWith("$module/") || file.startsWith("$module\\")
                 }
             }
-            .map { module -> module.replace("/", ":") }
-            .map { module -> ":$module"}
             .toSet()
 
-        // ✅ Ensure valid single-line JSON output
-        val jsonOutput = changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]")
+        val gradleModules = changedModules
+            .map { module -> ":${module.replace("/", ":")}" } // Convert back to Gradle format
 
-        // ✅ Correctly format for GitHub Actions output
-        println("MATRIX=$jsonOutput")
+        val changedModulePathJson = changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]")
+        val gradleModuleJson = gradleModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]")
+
+        // ✅ Ensure JSON formatting is correct
+        println("""MATRIX={"modulePaths":$changedModulePathJson,"gradleModules":$gradleModuleJson}""")
     }
 }
 

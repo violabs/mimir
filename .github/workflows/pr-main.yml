@@ -20,7 +20,13 @@ jobs:
 
       - name: Determine affected modules
         id: set-matrix
-        run: ./gradlew -q detectChangedModules >> $GITHUB_OUTPUT
+        run: |
+          echo "matrix=$(./gradlew -q detectChangedModules | grep MATRIX | cut -d'=' -f2)" >> $GITHUB_OUTPUT
+
+      - name: Debug Output
+        run: |
+          echo "Gradle Modules: ${{ fromJson(steps.set-matrix.outputs.matrix).gradleModules }}"
+          echo "Path Modules: ${{ fromJson(steps.set-matrix.outputs.matrix).pathModules }}"
 
   module-tests:
     needs: determine-modules
@@ -29,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: ${{ fromJson(needs.determine-modules.outputs.matrix) }}
+        module: ${{ fromJson(needs.determine-modules.outputs.matrix).gradleModules }}
       fail-fast: false
 
     steps:
