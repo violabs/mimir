@@ -20,7 +20,8 @@ jobs:
 
       - name: Determine affected modules
         id: set-matrix
-        run: ./gradlew -q detectChangedModules >> $GITHUB_OUTPUT
+        run: |
+          echo "matrix=$(./gradlew -q detectChangedModules | grep MATRIX | cut -d'=' -f2)" >> $GITHUB_OUTPUT
 
   module-tests:
     needs: determine-modules
