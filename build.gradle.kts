@@ -65,3 +65,10 @@ tasks.register("koverMergedReport") {
     
     dependsOn(subprojects.map { it.tasks.named("koverXmlReport") })
 }
+
+tasks.register("printModules") {
+    doLast {
+        val modules = rootProject.subprojects.map { it.path.removePrefix(":") }
+        modules.forEach { println(it) }
+    }
+}
