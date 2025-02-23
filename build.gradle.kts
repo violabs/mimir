@@ -114,6 +114,8 @@ tasks.register("detectChangedModules") {
                     file.startsWith("$module/") || file.startsWith("$module\\")  // ✅ Ensures submodules are detected
                 }
             }
+            .map { module -> module.replace("/", ":") }
+            .map { module -> ":$module"}
             .toSet()
 
         // ✅ Ensure valid single-line JSON output
