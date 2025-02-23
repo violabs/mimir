@@ -63,7 +63,7 @@ fun Project.sharedRepositories() {
 tasks.register("koverMergedReport") {
     group = "verification"
     description = "Generates merged coverage report for all modules"
-    
+
     dependsOn(subprojects.map { it.tasks.named("koverXmlReport") })
 }
 
@@ -73,6 +73,7 @@ tasks.register("printModules") {
         modules.forEach { println(it) }
     }
 }
+
 
 tasks.register("detectChangedModules") {
     doLast {
@@ -95,7 +96,7 @@ tasks.register("detectChangedModules") {
             }
 
         if (changedFiles.isEmpty()) {
-            logger.lifecycle("matrix=[]")
+            println("[]")  // ✅ Print an empty JSON array directly
             return@doLast
         }
 
@@ -110,17 +111,13 @@ tasks.register("detectChangedModules") {
         val changedModules = changedFiles
             .mapNotNull { file ->
                 allModules.find { module ->
-                    file.contains("$module/") || file.contains("$module\\") // Handles Unix & Windows paths
+                    file.startsWith("$module/") || file.startsWith("$module\\")  // ✅ Ensures submodules are detected
                 }
             }
             .toSet()
 
-        if (changedModules.isEmpty()) {
-            logger.lifecycle("matrix=[]")
-        } else {
-            logger.lifecycle("matrix<<EOF")
-            logger.lifecycle(changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]"))
-            logger.lifecycle("EOF")
-        }
+        // ✅ Print valid JSON directly for GitHub Actions
+        println(changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]"))
     }
 }
+
