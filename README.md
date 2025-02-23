@@ -21,6 +21,9 @@ A comprehensive collection of sample projects demonstrating how to integrate var
 
 ## Available Integrations 🔌
 
+### GraphQL 🌌
+- [Async with Structured Concurrency](/docs/graphql.md)
+
 ### Databases 💾
 - [PostgreSQL](/docs/databases/postgresql.md) 🐘
 - [MySQL](/docs/databases/mysql.md) 🐬
