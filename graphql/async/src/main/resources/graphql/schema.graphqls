@@ -1,0 +1,43 @@
+type Query {
+    getMythicalCreature(id: String!): MythicalCreatureOutput
+    searchMythicalCreatures(query: String!): [MythicalCreatureOutput!]!
+}
+
+type Mutation {
+    createMythicalCreature(input: CreateMythicalCreatureInput!): ID!
+    updateMythicalCreature(input: UpdateMythicalCreatureInput!): UpdateMythicalCreatureOutput!
+}
+
+type MythicalCreatureOutput {
+    id: ID!
+    name: String!
+    numberOfLegs: Int!
+    hasHair: Boolean!
+    taxonomyTags: [String!]
+    relations: [MythicalCreatureRelationOutput!]
+}
+
+type MythicalCreatureRelationOutput {
+    from: MythicalCreatureOutput!
+    to: MythicalCreatureOutput!
+    description: String
+}
+
+input CreateMythicalCreatureInput {
+    name: String!
+    numberOfLegs: Int!
+    hasHair: Boolean!
+    taxonomyTags: [String!]
+}
+
+input UpdateMythicalCreatureInput {
+    id: ID!
+    name: String
+    numberOfLegs: Int
+    hasHair: Boolean
+    taxonomyTags: [String!]
+}
+
+type UpdateMythicalCreatureOutput {
+    fieldsUpdated: [String!]
+}

@@ -1,0 +1,19 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "mythical_creature_init",
+        "author": "stallnick",
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "changesets/mythical_creature/initial_db.sql",
+              "relativeToChangelogFile": true,
+              "encoding": "UTF-8"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

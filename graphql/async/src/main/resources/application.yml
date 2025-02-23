@@ -1,0 +1,21 @@
+
+spring:
+  graphql:
+    path: /graphql
+    graphiql:
+      enabled: true  # Enables GraphiQL UI at /graphiql
+  datasource:
+    url: jdbc:postgresql://localhost:5432/graphql
+    username: admin
+    password: password
+  liquibase:
+    url: jdbc:postgresql://localhost:5432/graphql
+    user: admin
+    password: password
+    change-log: ./db/changelog/db.changelog-main.json
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'caches,health,info'

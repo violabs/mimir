@@ -24,6 +24,9 @@ includeModules(
     "fluentd",
     "filebeat",
     "logstash"
+  ),
+  "graphql".subModules(
+    "async"
   )
 )
 
