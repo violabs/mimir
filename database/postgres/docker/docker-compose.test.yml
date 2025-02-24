@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   postgres-test: # https://hub.docker.com/_/postgres
     image: postgres:latest
