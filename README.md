@@ -19,15 +19,26 @@ A comprehensive collection of sample projects demonstrating how to integrate var
 ```
 mimir/
 ├── core/                 # Shared utilities and base configurations
+│   ├── common/          # Common utilities
+│   ├── sharedSql/       # Shared SQL configurations
+│   └── springJpaCore/   # JPA core implementations
 ├── database/            # Database integration examples
 │   ├── postgres/        # PostgreSQL integration
 │   └── mysql/          # MySQL integration
-├── messaging/           # Message queue examples
-│   └── simple-kafka/   # Basic Kafka setup
-├── testing/             # Testing examples
-│   └── selenium/       # Selenium integration
-└── vector/              # Vector database examples
-    └── weaviate/       # Weaviate integration
+├── first/              # First module examples
+├── graphql/            # GraphQL implementations
+│   └── async/         # Async GraphQL operations
+├── kafka/              # Kafka integration examples
+│   └── simple/        # Basic Kafka setup
+├── logs/               # Logging integrations
+│   ├── filebeat/      # Filebeat integration
+│   ├── fluentBit/     # Fluent Bit integration
+│   ├── fluentd/       # Fluentd integration
+│   └── logstash/      # Logstash integration
+├── testing/            # Testing examples
+│   └── selenium/      # Selenium integration
+└── vector/             # Vector database examples
+    └── weaviate/      # Weaviate integration
 ```
 
 ## Available Integrations 🔌
@@ -35,7 +46,8 @@ mimir/
 ### Core Features 🛠️
 - [Core Module Documentation](/docs/core/README.md)
 - Common utilities and configurations
-- Shared test helpers
+- Shared SQL configurations
+- JPA core implementations
 - Base implementations
 
 ### Databases 💾
@@ -43,9 +55,20 @@ mimir/
 - [MySQL Integration](/docs/databases/mysql.md)
 - [View Database Docs](/docs/databases/README.md)
 
-### Message Queues 📨
+### GraphQL 📊
+- [Async GraphQL Operations](/graphql/async/README.md)
+- GraphQL Schema Design
+- Query Resolution Patterns
+
+### Kafka Integration 📨
 - [Simple Kafka Setup](/docs/messaging/kafka-simple.md)
 - [View Messaging Docs](/docs/messaging/README.md)
+
+### Logging Infrastructure 📝
+- Filebeat Integration
+- Fluent Bit Setup
+- Fluentd Configuration
+- Logstash Implementation
 
 ### Testing 🧪
 - [Testing Overview](/docs/testing/README.md)
