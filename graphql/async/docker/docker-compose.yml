@@ -1,11 +1,11 @@
-name: 'postgres'
+name: 'graphql-async'
 
 x-postgres: &postgres
   image: postgres:latest
   environment:
-    POSTGRES_USER: postgres
+    POSTGRES_USER: admin
     POSTGRES_PASSWORD: password
-    POSTGRES_DB: postgres
+    POSTGRES_DB: graphql
 
 services:
   dev-postgres:
@@ -18,4 +18,4 @@ services:
     <<: *postgres
     profiles: [test]
     ports:
-      - "5433:5432"
+      - "5432:5432"

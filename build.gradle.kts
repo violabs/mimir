@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.ByteArrayOutputStream
 
 plugins {
     id("org.springframework.boot") version "3.2.4" apply false
@@ -62,6 +63,68 @@ fun Project.sharedRepositories() {
 tasks.register("koverMergedReport") {
     group = "verification"
     description = "Generates merged coverage report for all modules"
-    
+
     dependsOn(subprojects.map { it.tasks.named("koverXmlReport") })
 }
+
+tasks.register("printModules") {
+    doLast {
+        val modules = rootProject.subprojects.map { it.path.removePrefix(":") }
+        modules.forEach { println(it) }
+    }
+}
+
+
+tasks.register("detectChangedModules") {
+    doLast {
+        val changedFiles = System.getenv("CHANGED_FILES")
+            ?.split(" ")
+            ?.filter { it.isNotBlank() }
+            ?: run {
+                val outputStream = ByteArrayOutputStream()
+                exec {
+                    commandLine("git", "diff", "--name-only", "origin/main...HEAD")
+                    standardOutput = outputStream
+                }
+
+                outputStream
+                    .toString()
+                    .trim()
+                    .split("\n")
+                    .filter { it.isNotBlank() }
+            }
+
+        if (changedFiles.isEmpty()) {
+            println("""MATRIX=[]""")  // ✅ Always return valid JSON
+            return@doLast
+        }
+
+        // Convert Gradle's ":"-based module names to filesystem paths
+        val modules = rootProject.subprojects.map { it.path }
+
+        val allModules = modules
+            .map { it.removePrefix(":").replace(":", "/") }
+            .sortedByDescending { it.length }
+            .toSet()
+
+        // Identify affected modules, considering submodules properly
+        val modulePaths = changedFiles
+            .mapNotNull { file ->
+                allModules.find { module ->
+                    file.startsWith("$module/") || file.startsWith("$module\\")
+                }
+            }
+            .toSet()
+
+
+        val moduleDetails = modulePaths.joinToString(",", "[", "]") {
+            val module = it.replace("/", ":")
+            val filename = it.replace("/", "-")
+
+            """{"module":":$module","path":"$it","filename":"$filename"}"""
+        }
+
+        println("MATRIX=$moduleDetails")
+    }
+}
+

@@ -24,6 +24,9 @@ includeModules(
     "fluentd",
     "filebeat",
     "logstash"
+  ),
+  "graphql".subModules(
+    "async"
   )
 )
 
@@ -34,7 +37,7 @@ class Module(private val moduleName: String) {
 fun includeModules(vararg modules: Any) {
   val ids = modules.asSequence().flatMap { it.asStrings() }.toList()
 
-  logger.lifecycle("including: $ids")
+  logger.debug("including: {}", ids)
   include(ids)
 }
 

@@ -13,4 +13,17 @@ interface VLoggable {
             val name = this::class.simpleName ?: "DefaultLogger"
             return LOG_MAP.getOrPut(name) { K_LOGGING.logger(name) }
         }
+
+    suspend fun <T> trace(method: String, runnable: suspend LogContext.() -> T): T {
+        return LogContext(method, log).runnable()
+    }
+}
+
+class LogContext(
+    private val methodName: String,
+    private val logger: KLogger
+) {
+    fun log(message: String) {
+        logger.info("[$methodName] $message")
+    }
 }
