@@ -95,19 +95,20 @@ tasks.register("detectChangedModules") {
             }
 
         if (changedFiles.isEmpty()) {
-            println("""MATRIX={"modulePaths":[],"gradleModules":[]}""")  // ✅ Always return valid JSON
+            logger.lifecycle("""MATRIX=[]""")  // ✅ Always return valid JSON
             return@doLast
         }
 
         // Convert Gradle's ":"-based module names to filesystem paths
-        val allModules = rootProject
-            .subprojects
-            .map { it.path.removePrefix(":").replace(":", "/") }
+        val modules = rootProject.subprojects.map { it.path }
+
+        val allModules = modules
+            .map { it.removePrefix(":").replace(":", "/") }
             .sortedByDescending { it.length }
             .toSet()
 
         // Identify affected modules, considering submodules properly
-        val changedModules = changedFiles
+        val modulePaths = changedFiles
             .mapNotNull { file ->
                 allModules.find { module ->
                     file.startsWith("$module/") || file.startsWith("$module\\")
@@ -115,14 +116,15 @@ tasks.register("detectChangedModules") {
             }
             .toSet()
 
-        val gradleModules = changedModules
-            .map { module -> ":${module.replace("/", ":")}" } // Convert back to Gradle format
 
-        val changedModulePathJson = changedModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]")
-        val gradleModuleJson = gradleModules.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]")
+        val moduleDetails = modulePaths.joinToString(",", "[", "]") {
+            val module = it.replace("/", ":")
+            val filename = it.replace("/", "-")
 
-        // ✅ Ensure JSON formatting is correct
-        println("""MATRIX={"modulePaths":$changedModulePathJson,"gradleModules":$gradleModuleJson}""")
+            """{"module":":$module","path":"$it","filename":"$filename"}"""
+        }
+
+        logger.lifecycle("MATRIX=$moduleDetails")
     }
 }
 
