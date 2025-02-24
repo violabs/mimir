@@ -29,11 +29,10 @@ repositories {
 dockerCompose {
     useComposeFiles.set(listOf("./docker/docker-compose.yml"))
     composeAdditionalArgs.add("--profile=test")
+    isRequiredBy(tasks.test)
 }
 
 tasks.withType<Test> {
-    dockerCompose.isRequiredBy(this)
-
     systemProperty("spring.profiles.active", "test")
 
     useJUnitPlatform()
