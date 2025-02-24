@@ -10,10 +10,12 @@ x-postgres: &postgres
 services:
   dev-postgres:
     <<: *postgres
+    profiles: [dev]
     ports:
       - "5432:5432"
 
   test-postgres:
     <<: *postgres
+    profiles: [dev]
     ports:
       - "5432:5432"
