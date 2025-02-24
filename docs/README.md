@@ -1,24 +1,42 @@
 # Mimir Documentation 📚
 
-Welcome to the Mimir documentation. This guide provides comprehensive information about integrating various services with Spring Boot.
+## Getting Started 🚀
+- [Quick Start Guide](quick-start.md)
+- [Contributing Guidelines](contributing.md)
 
-## Documentation Structure 📁
+## Core Components 🛠️
+- [Core Module Overview](core/README.md)
+- [Project Configuration](core/configuration.md)
+- [Common Utilities](core/utilities.md)
+- [Error Handling](core/error-handling.md)
 
-### Getting Started 🚀
-- [Quick Start Guide](quick-start.md) ⚡
-- [Contributing Guidelines](contributing.md) 🤝
+## Integration Examples 🔌
 
-### Integration Guides 🔌
-- [Databases](databases/README.md) 💾
-- [Message Queues](messaging/README.md) 📨
-- [Testing Tools](testing/README.md) 🧪
-- [Vector Databases](vector-databases/README.md) 🧬
+### Databases 💾
+- [Database Overview](databases/README.md)
+- [PostgreSQL Integration](databases/postgresql.md)
+- [MySQL Integration](databases/mysql.md)
 
-## Navigation 🧭
+### Messaging 📨
+- [Messaging Overview](messaging/README.md)
+- [Simple Kafka Setup](messaging/kafka-simple.md)
 
-Each integration has its own detailed guide covering:
-- 🔧 Setup and configuration
-- 📝 Basic usage examples
-- 🎯 Common patterns
-- ❗ Troubleshooting
-- 🚀 Advanced usage
+### Testing 🧪
+- [Testing Overview](testing/README.md)
+- [Unit Testing Guidelines](testing/unit-testing.md)
+- [Integration Testing](testing/integration-testing.md)
+- [Selenium Integration](testing/selenium.md)
+
+### Vector Databases 🧬
+- [Vector Database Overview](vector-databases/README.md)
+- [Weaviate Integration](vector-databases/weaviate.md)
+
+## Docker Configuration 🐳
+- Each module contains its own `docker-compose.yml` file
+- [Common Docker Configuration](core/docker-configuration.md)
+- [Environment Setup](core/environment-setup.md)
+
+## Additional Resources 📖
+- [API Documentation](https://github.com/violabs/mimir/wiki/API-Documentation)
+- [Troubleshooting Guide](core/troubleshooting.md)
+- [Performance Tuning](core/performance.md)
