@@ -27,7 +27,7 @@ repositories {
 }
 
 dockerCompose {
-    useComposeFiles.set(listOf("./docker/docker-compose.test.yml"))
+    useComposeFiles.set(listOf("docker/docker-compose.test.yml"))
 }
 
 tasks.withType<Test> {
