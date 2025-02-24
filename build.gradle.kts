@@ -95,7 +95,7 @@ tasks.register("detectChangedModules") {
             }
 
         if (changedFiles.isEmpty()) {
-            logger.lifecycle("""MATRIX=[]""")  // ✅ Always return valid JSON
+            println("""MATRIX=[]""")  // ✅ Always return valid JSON
             return@doLast
         }
 
@@ -124,7 +124,7 @@ tasks.register("detectChangedModules") {
             """{"module":":$module","path":"$it","filename":"$filename"}"""
         }
 
-        logger.lifecycle("MATRIX=$moduleDetails")
+        println("MATRIX=$moduleDetails")
     }
 }
 
