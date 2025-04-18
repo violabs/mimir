@@ -18,6 +18,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Restore Ollama model cache
+        uses: actions/cache@v3
+        with:
+          path: ./ollama
+          key: ollama-model-${{ runner.os }}-${{ hashFiles('docker/ollama/docker-compose.yml') }}
+
+      - name: Pull Ollama model if cache‑miss
+        run: |
+          if [ ! -d ~/.ollama/models/registry.ollama.ai/library/nomic-embed-text ]; then
+            echo "Cache miss—pulling nomic-embed-text"
+            ollama pull nomic-embed-text:latest
+          else
+            echo "Cache hit—skipping pull"
+          fi
+
       - name: Determine affected modules
         id: set-matrix
         run: |
