@@ -42,28 +42,22 @@ open class PullOnStartupTask : OllamaModelTask() {
             .build()
 
         client.newCall(pullReq).execute().use { resp ->
-            if (resp.isSuccessful) {
-                logger.lifecycle("Pull API accepted (code ${resp.code})")
-            } else {
+            if (!resp.isSuccessful) {
                 throw OllamaException("Pull request failed (code ${resp.code})")
             }
-        }
 
-        // 3) Poll until the model shows up
-        val maxRetries = 10
-        var attempt = 0
-        while (attempt < maxRetries) {
-            if (checkModelExists(client, tagRequest, mapper)) {
-                logger.lifecycle("Model now available: $model")
-                return
+            val reader = resp.body.charStream()
+            reader.buffered().forEachLine { line ->
+                logger.debug("OLLAMA: $line")
             }
-
-            attempt++
-            logger.lifecycle("Still pulling… attempt $attempt/$maxRetries")
-            Thread.sleep(2_000)  // wait 2s before retry
         }
 
-        throw OllamaException("Model pull timed out after $maxRetries attempts: $model")
+        if (checkModelExists(client, tagRequest, mapper)) {
+            logger.lifecycle("Model now available: $model")
+            return
+        } else {
+            logger.lifecycle("Failed to pull model: $model")
+        }
     }
 
     private fun checkModelExists(
