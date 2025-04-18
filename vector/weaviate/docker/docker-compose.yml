@@ -15,38 +15,32 @@ x-ollama: &ollama
   image: alpine/ollama:0.3.13
   networks:
     - weaviate_network
-  healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost:11434/api/health"]
-    interval: 10s
-    timeout: 5s
-    retries: 5
 
 services:
-  mimir-dev-weaviate:
-    <<: *weaviate
-    profiles: [dev]
-    ports:
-      - "8083:8080"
-
   mimir-ollama:
     <<: *ollama
     profiles: [ollama]
     volumes:
-      - ollama:/root/.ollama
+      - ./ollama:/root/.ollama
     ports:
       - "11435:11434"
     # If needed, add a command override here
 
+  mimir-dev-weaviate:
+    <<: *weaviate
+    profiles: [ dev ]
+    ports:
+      - "8083:8080"
+
   mimir-test-weaviate:
     <<: *weaviate
     profiles: [test]
+    ports:
+      - "8084:8080"
 
   mimir-e2e-weaviate:
     <<: *weaviate
     profiles: [e2e]
-
-volumes:
-  ollama:
 
 networks:
   weaviate_network:

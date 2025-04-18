@@ -54,6 +54,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - uses: actions/cache@v3
+        with:
+          path: ./ollama
+          key: ollama-model-${{ runner.os }}-v1
+
       - uses: actions/setup-java@v4
         name: Set up JDK 21
         with:
@@ -65,7 +70,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run build for ${{ matrix.module-namespace.module }}
-        run: ./gradlew ${{ matrix.module-namespace.module }}:build -x test
+        run: ./gradlew ${{ matrix.module-namespace.module }}:build -x ${{ matrix.module-namespace.module }}:test
         continue-on-error: false
 
       - name: Run tests for ${{ matrix.module-namespace.module }}
@@ -88,6 +93,7 @@ jobs:
 
       - name: Add coverage report to PR
         uses: mi-kas/kover-report@v1
+        if: false
         with:
           path: |
             ${{ github.workspace }}/${{ matrix.module-namespace.path }}/build/reports/kover/report.xml

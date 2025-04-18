@@ -5,28 +5,29 @@ includeModules(
   "core".subModules(
     "common",
     "springJpaCore",
-    "sharedSql"
+    "sharedSql",
+    "testing"
   ),
-  "first",
-  "kafka".subModules("simple"),
   "database".subModules(
     "postgres",
     "mysql"
   ),
-  "vector".subModules(
-    "weaviate"
+  "first",
+  "graphql".subModules(
+    "async"
   ),
-  "testing".subModules(
-    "selenium"
-  ),
+  "kafka".subModules("simple"),
   "logs".subModules(
     "fluentBit",
     "fluentd",
     "filebeat",
     "logstash"
   ),
-  "graphql".subModules(
-    "async"
+  "testing".subModules(
+    "selenium"
+  ),
+  "vector".subModules(
+    "weaviate"
   )
 )
 

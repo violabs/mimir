@@ -1,4 +1,4 @@
-package io.violabs.mimir.core
+package io.violabs.mimir.core.testing
 
 abstract class SimpleTestHarness {
 
@@ -41,11 +41,12 @@ abstract class SimpleTestHarness {
     }
 
     fun <U> checkEquals(expected: U?, actual: U?, prefix: String = "") {
-      assert(actual == expected) {
-        "\n" +
-        "${prefix}EXPECT: $expected\n" +
-        "${prefix}ACTUAL: $actual"
-      }
+      val message = """
+        |
+        |${prefix}EXPECT: $expected
+        |${prefix}ACTUAL: $actual
+      """.trimMargin("|")
+      assertExpected(expected, actual, message)
     }
   }
 

@@ -1,13 +1,13 @@
 package io.violabs.mimir.graphql.async.config
 
 import com.fasterxml.jackson.core.JsonProcessingException
-import io.violabs.mimir.core.common.VLoggable
+import io.violabs.mimir.core.common.Loggable
 import io.violabs.mimir.graphql.async.common.OBJECT_MAPPER
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
 
 @Converter
-class JsonConverter<T> : AttributeConverter<T, String>, VLoggable {
+class JsonConverter<T> : AttributeConverter<T, String>, Loggable {
     override fun convertToDatabaseColumn(attribute: T?): String? {
         if (attribute == null) return null
         

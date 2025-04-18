@@ -7,7 +7,7 @@ private val K_LOGGING = KLogging()
 
 private val LOG_MAP = mutableMapOf<String, KLogger>()
 
-interface VLoggable {
+interface Loggable {
     val log: KLogger
         get() {
             val name = this::class.simpleName ?: "DefaultLogger"
