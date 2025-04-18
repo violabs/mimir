@@ -7,6 +7,7 @@ A comprehensive collection of sample projects demonstrating how to integrate var
 - Docker Desktop 🐳
 - Java 21+ ☕
 - Kotlin 2.x 💪
+- IDE (IntelliJ IDEA recommended) 💻
 
 ### Basic Setup 🔧
 1. Clone the repository
@@ -15,29 +16,70 @@ A comprehensive collection of sample projects demonstrating how to integrate var
 4. Follow module-specific README
 
 ## Project Structure 📁
-- `core/` - Shared utilities and base configurations
-- `first/` - Your first Spring Boot integration example
-- Each additional folder represents a specific integration example
+```
+mimir/
+├── core/                 # Shared utilities and base configurations
+│   ├── common/          # Common utilities
+│   ├── sharedSql/       # Shared SQL configurations
+│   └── springJpaCore/   # JPA core implementations
+├── database/            # Database integration examples
+│   ├── postgres/        # PostgreSQL integration
+│   └── mysql/          # MySQL integration
+├── first/              # First module examples
+├── graphql/            # GraphQL implementations
+│   └── async/         # Async GraphQL operations
+├── kafka/              # Kafka integration examples
+│   └── simple/        # Basic Kafka setup
+├── logs/               # Logging integrations
+│   ├── filebeat/      # Filebeat integration
+│   ├── fluentBit/     # Fluent Bit integration
+│   ├── fluentd/       # Fluentd integration
+│   └── logstash/      # Logstash integration
+├── testing/            # Testing examples
+│   └── selenium/      # Selenium integration
+└── vector/             # Vector database examples
+    └── weaviate/      # Weaviate integration
+```
 
 ## Available Integrations 🔌
 
-### GraphQL 🌌
-- [Async with Structured Concurrency](/docs/graphql.md)
+### Core Features 🛠️
+- [Core Module Documentation](/docs/core/README.md)
+- Common utilities and configurations
+- Shared SQL configurations
+- JPA core implementations
+- Base implementations
 
 ### Databases 💾
-- [PostgreSQL](/docs/databases/postgresql.md) 🐘
-- [MySQL](/docs/databases/mysql.md) 🐬
-- View [planned database integrations](/docs/databases/README.md)
+- [PostgreSQL Integration](/docs/databases/postgresql.md) 
+- [MySQL Integration](/docs/databases/mysql.md)
+- [View Database Docs](/docs/databases/README.md)
 
-### Message Queues 📨
-- [Simple Kafka Setup](/docs/messaging/kafka-simple.md) 🚀
-- View [planned messaging integrations](/docs/messaging/README.md)
+### GraphQL 📊
+- [Async GraphQL Operations](/graphql/async/README.md)
+- GraphQL Schema Design
+- Query Resolution Patterns
+
+### Kafka Integration 📨
+- [Simple Kafka Setup](/docs/messaging/kafka-simple.md)
+- [View Messaging Docs](/docs/messaging/README.md)
+
+### Logging Infrastructure 📝
+- Filebeat Integration
+- Fluent Bit Setup
+- Fluentd Configuration
+- Logstash Implementation
 
 ### Testing 🧪
-- [Selenium Integration](/docs/testing/selenium.md) 🌐
+- [Testing Overview](/docs/testing/README.md)
+- [Selenium Integration](/docs/testing/selenium.md)
+- Unit Testing Guidelines
+- Integration Testing Patterns
 
 ### Vector Databases 🧬
-- [Weaviate](/docs/vector-databases/weaviate.md) 🔍
+- [Weaviate Integration](/docs/vector-databases/weaviate.md)
+- Vector Search Examples
+- Embedding Generation
 
 ## Contributing 🤝
 See our [contribution guide](/docs/contributing.md) for:
@@ -46,22 +88,31 @@ See our [contribution guide](/docs/contributing.md) for:
 - PR process
 
 ## Development 👩‍💻
-### Building
+
+### Building and Testing
 ```bash
+# Build all modules
 ./gradlew build
-```
 
-### Testing
-```bash
+# Run all tests
 ./gradlew test
+
+# Build specific module
+./gradlew :database:postgres:build
+
+# Test specific module
+./gradlew :database:postgres:test
 ```
 
-### Docker Environment 🐳
+### Docker Integration 🐳
 Each module contains its own docker-compose.yml for required services.
+See [Docker Configuration Guide](/docs/core/docker-configuration.md).
 
 ## Resources 📚
-- [Gradle Docker Compose Plugin](https://github.com/avast/gradle-docker-compose-plugin)
+- [Complete Documentation](/docs/README.md)
 - [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
-- [Project Documentation](/docs/README.md)
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Docker Compose Documentation](https://docs.docker.com/compose/)
 
-[View Full Documentation](/docs/README.md) 📖
+## License 📄
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
