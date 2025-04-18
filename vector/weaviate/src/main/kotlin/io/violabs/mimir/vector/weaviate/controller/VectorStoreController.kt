@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import io.violabs.mimir.core.common.VLoggable
+import io.violabs.mimir.core.common.Loggable
 import io.violabs.mimir.vector.weaviate.domain.request.AddSentenceRequest
 import io.violabs.mimir.vector.weaviate.service.DataService
 import org.springframework.ai.document.Document
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("api/vector-store")
 @Tag(name = "vector-operations", description = "Endpoints for vector store operations")
-class VectorStoreController(private val dataService: DataService) : VLoggable {
+class VectorStoreController(private val dataService: DataService) : Loggable {
 
     @Operation(
         summary = "Add content to vector store",
@@ -29,22 +29,24 @@ class VectorStoreController(private val dataService: DataService) : VLoggable {
             3. Available for similarity search
         """
     )
-    @ApiResponses(value = [
-        ApiResponse(
-            responseCode = "200",
-            description = "Content successfully added"
-        ),
-        ApiResponse(
-            responseCode = "400",
-            description = "Invalid request format or empty content list",
-            content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
-        ),
-        ApiResponse(
-            responseCode = "500",
-            description = "Error occurred while processing the request",
-            content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
-        )
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Content successfully added"
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid request format or empty content list",
+                content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Error occurred while processing the request",
+                content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
+            )
+        ]
+    )
     @PostMapping("add")
     fun addContent(
         @RequestBody
@@ -67,23 +69,25 @@ class VectorStoreController(private val dataService: DataService) : VLoggable {
             3. Returns matching content ordered by similarity
         """
     )
-    @ApiResponses(value = [
-        ApiResponse(
-            responseCode = "200",
-            description = "Search completed successfully",
-            content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
-        ),
-        ApiResponse(
-            responseCode = "400",
-            description = "Invalid or empty query",
-            content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
-        ),
-        ApiResponse(
-            responseCode = "500",
-            description = "Error occurred while processing the search",
-            content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
-        )
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Search completed successfully",
+                content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid or empty query",
+                content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Error occurred while processing the search",
+                content = [Content(mediaType = MediaType.APPLICATION_JSON_VALUE)]
+            )
+        ]
+    )
     @GetMapping("search")
     fun search(
         @Parameter(

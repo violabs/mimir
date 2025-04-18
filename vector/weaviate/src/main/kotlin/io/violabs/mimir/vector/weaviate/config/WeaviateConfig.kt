@@ -2,6 +2,7 @@ package io.violabs.mimir.vector.weaviate.config
 
 import io.weaviate.client.Config
 import io.weaviate.client.WeaviateClient
+import jakarta.annotation.PostConstruct
 import org.springframework.ai.embedding.EmbeddingModel
 import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.ai.vectorstore.weaviate.WeaviateVectorStore
@@ -38,5 +39,12 @@ class WeaviateConfig(val configProperties: WeaviateConfigProperties) {
                 )
             )
             .build()
+    }
+
+    @PostConstruct
+    fun init() {
+        println("Initializing Weaviate config")
+        println(" - schema: ${configProperties.scheme}")
+        println(" - host:   ${configProperties.host}")
     }
 }

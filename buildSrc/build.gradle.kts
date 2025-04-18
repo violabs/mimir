@@ -20,7 +20,6 @@ repositories {
 
 dependencies {
     val ktorClientVersion = "3.0.1"
-    val kotlinJacksonVersion = "2.17.1"
     // Add any required dependencies
     implementation("org.springframework:spring-context:6.1.14")
     implementation("io.ktor:ktor-client-cio:$ktorClientVersion") // or another engine like ktor-client-apache, ktor-client-okhttp, etc.
@@ -33,19 +32,22 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorClientVersion")
     implementation("io.ktor:ktor-client-logging:$ktorClientVersion")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
-    annotationProcessor("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.0-rc2")
+    annotationProcessor("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.0-rc2")
 }
 
 gradlePlugin {
     plugins {
         create("ollamaTestStartup") {
             id = "io.violabs.plugins.ai.ollama-test-startup"
-            implementationClass = "io.violabs.mimir.buildsrc.ai.ollamaTestStartup.OllamaTestStartupPlugin"
+            implementationClass = "io.violabs.mimir.plugins.ai.ollamaTestStartup.OllamaTestStartupPlugin"
+        }
+
+        create("pipeline") {
+            id = "io.violabs.plugins.pipeline"
+            implementationClass = "io.violabs.mimir.plugins.pipeline.PipelinePlugin"
         }
     }
-}
-
-kotlin {
-    jvmToolchain(17)
 }

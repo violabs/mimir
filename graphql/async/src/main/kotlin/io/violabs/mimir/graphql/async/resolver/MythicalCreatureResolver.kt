@@ -1,6 +1,6 @@
 package io.violabs.mimir.graphql.async.resolver
 
-import io.violabs.mimir.core.common.VLoggable
+import io.violabs.mimir.core.common.Loggable
 import io.violabs.mimir.graphql.async.domain.*
 import io.violabs.mimir.graphql.async.domain.input.CreateMythicalCreatureInput
 import io.violabs.mimir.graphql.async.domain.input.UpdateMythicalCreatureInput
@@ -18,7 +18,7 @@ import java.util.UUID
 @Controller
 class MythicalCreatureResolver(
     private val mythicalCreatureService: MythicalCreatureService
-) : VLoggable {
+) : Loggable {
     @QueryMapping
     suspend fun getMythicalCreature(@Argument id: String): MythicalCreature? = trace("test") {
         log("Getting mythical creature $id")

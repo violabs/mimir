@@ -1,4 +1,4 @@
-package io.violabs.mimir.buildsrc.ai.ollamaTestStartup
+package io.violabs.mimir.plugins.ai.ollamaTestStartup
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
