@@ -64,22 +64,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Run build for ${{ matrix.module-namespace.module == ':src' && 'src' || matrix.module-namespace.module }}
-        run: >-
-          if [ "${{ matrix.module-namespace.module }}" == ":src" ]; then
-            ./gradlew build -x test -x testRegressions
-          else
-            ./gradlew ${{ matrix.module-namespace.module }}:build -x ${{ matrix.module-namespace.module }}:test -x ${{ matrix.module-namespace.module }}:testRegressions
-          fi
+      - name: Run build for ${{ matrix.module-namespace.module }}
+        run: ./gradlew ${{ matrix.module-namespace.module }}:build -x ${{ matrix.module-namespace.module }}:test
         continue-on-error: false
 
-      - name: Run tests for ${{ matrix.module-namespace.module == ':src' && 'src' || matrix.module-namespace.module }}
-        run: >-
-          if [ "${{ matrix.module-namespace.module }}" == ":src" ]; then
-            ./gradlew test -Pkover koverXmlReport --info
-          else
-            ./gradlew ${{ matrix.module-namespace.module }}:test -Pkover ${{ matrix.module-namespace.module }}:koverXmlReport --info
-          fi
+      - name: Run tests for ${{ matrix.module-namespace.module }}
+        run: ./gradlew ${{ matrix.module-namespace.module }}:test -Pkover ${{ matrix.module-namespace.module }}:koverXmlReport --info
         continue-on-error: false
 
       - name: Upload test reports
