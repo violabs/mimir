@@ -12,10 +12,7 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-//    implementation("org.springframework.boot:spring-boot-starter-data-neo4j")
-
-    compileOnly("org.neo4j:neo4j-ogm-core:4.0.17")
-    runtimeOnly("org.neo4j:neo4j-ogm-bolt-driver:4.0.17")
+    implementation("org.springframework.boot:spring-boot-starter-data-neo4j")
 
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -25,7 +22,6 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.graphql:spring-graphql-test")
 }
 
 tasks.withType<Test> {

@@ -1,11 +1,12 @@
 package io.violabs.mimir.knowledgeGraph.domain
 
-import org.neo4j.ogm.annotation.Id
-import org.neo4j.ogm.annotation.NodeEntity
+import org.springframework.data.annotation.Id
+import org.springframework.data.neo4j.core.schema.Node
 
-@NodeEntity
+@Node
 data class Keyword(
     @Id
     val name: String? = null,
-    val id: Long? = null
-)
+) : Entity<String> {
+    override fun getKey(): String? = name
+}

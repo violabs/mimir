@@ -1,18 +1,19 @@
 package io.violabs.mimir.knowledgeGraph.domain
 
-import org.neo4j.ogm.annotation.GeneratedValue
-import org.neo4j.ogm.annotation.Id
-import org.neo4j.ogm.annotation.NodeEntity
-import org.neo4j.ogm.annotation.Relationship
-import org.neo4j.ogm.id.UuidStrategy
+import org.springframework.data.annotation.Id
+import org.springframework.data.neo4j.core.schema.GeneratedValue
+import org.springframework.data.neo4j.core.schema.GeneratedValue.UUIDGenerator
+import org.springframework.data.neo4j.core.schema.Node
+import org.springframework.data.neo4j.core.schema.Relationship
 import java.util.UUID
 
-@NodeEntity
+@Node
 data class Quote(
-    @Id @GeneratedValue(strategy = UuidStrategy::class)
+    @Id @GeneratedValue(UUIDGenerator::class)
     val quoteId: UUID? = null,
-    val id: Long? = null,
     val text: String,
     @Relationship(type = "TAGGED", direction = Relationship.Direction.INCOMING)
     val keywords: List<Keyword> = listOf()
-)
+) : Entity<UUID> {
+    override fun getKey(): UUID? = quoteId
+}
