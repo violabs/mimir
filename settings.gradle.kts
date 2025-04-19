@@ -2,6 +2,7 @@
 rootProject.name = "mimir"
 
 includeModules(
+  "ai".subModules("kg-rag"),
   "core".subModules(
     "common",
     "springJpaCore",
