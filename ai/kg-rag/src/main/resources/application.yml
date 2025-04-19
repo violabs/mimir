@@ -21,7 +21,6 @@ spring:
       username: ${NEO4J_USERNAME:neo4j}
       password: ${NEO4J_PASSWORD:test_password}
 
-
 springdoc:
   api-docs:
     enabled: true

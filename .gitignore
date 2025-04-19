@@ -45,3 +45,4 @@ bin/
 
 ### Custom ###
 **/_personal
+.venv
