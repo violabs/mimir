@@ -17,6 +17,7 @@ includeModules(
     "async"
   ),
   "kafka".subModules("simple"),
+  "knowledgeGraph",
   "logs".subModules(
     "fluentBit",
     "fluentd",

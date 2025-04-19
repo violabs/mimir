@@ -1,0 +1,24 @@
+name: mimir_knowledge_graph
+
+x-neo4j: &neo4j
+  image: neo4j:latest
+  restart: always
+
+services:
+  neo4j:
+    <<: *neo4j
+    profiles: [ dev ]
+    environment:
+      - NEO4J_AUTH=neo4j/test_password
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+
+  neo4j-test:
+    <<: *neo4j
+    profiles: [ test ]
+    environment:
+      - NEO4J_AUTH=neo4j/test_password
+    ports:
+      - "7475:7474"
+      - "7688:7687"
