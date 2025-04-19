@@ -1,3 +1,10 @@
 spring:
   neo4j:
     uri: bolt://localhost:7688
+
+logging:
+  level:
+    org.neo4j.ogm: INFO
+    org.neo4j.ogm.drivers.bolt.request.BoltRequest: INFO
+    org.springframework.data.neo4j.repository.query: INFO
+    org.neo4j.driver: INFO

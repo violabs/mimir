@@ -21,6 +21,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
+    testImplementation(project(":core:testing"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -33,4 +34,5 @@ tasks.withType<Test> {
 dockerCompose {
     useComposeFiles.set(listOf("./docker/docker-compose.yml"))
     composeAdditionalArgs.add("--profile=test")
+    isRequiredBy(tasks.test)
 }
