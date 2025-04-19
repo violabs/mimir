@@ -5,7 +5,7 @@ x-neo4j: &neo4j
   restart: always
 
 services:
-  neo4j:
+  mimir-kg-neo4j:
     <<: *neo4j
     profiles: [ dev ]
     environment:
@@ -14,7 +14,7 @@ services:
       - "7474:7474"
       - "7687:7687"
 
-  neo4j-test:
+  mimir-kg-neo4j-test:
     <<: *neo4j
     profiles: [ test ]
     environment:
