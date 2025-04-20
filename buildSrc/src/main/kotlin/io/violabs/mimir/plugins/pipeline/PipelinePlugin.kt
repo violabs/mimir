@@ -1,5 +1,8 @@
 package io.violabs.mimir.plugins.pipeline
 
+import io.violabs.mimir.plugins.docker.CheckRunningContainersTask
+import io.violabs.mimir.plugins.pipeline.tasks.DetectChangeModulesTask
+import io.violabs.mimir.plugins.pipeline.tasks.PrintModulesTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
@@ -14,6 +17,10 @@ class PipelinePlugin : Plugin<Project> {
         }
 
         target.tasks.register<DetectChangeModulesTask>("detectChangedModules") {
+            group = "pipeline"
+        }
+
+        target.tasks.register<CheckRunningContainersTask>("checkRunningContainers") {
             group = "pipeline"
         }
     }
