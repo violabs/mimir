@@ -62,7 +62,8 @@ val debugEnabled = if (project.hasProperty("debug")) {
 }
 
 tasks.named("composeUp") {
-    if (debugEnabled) finalizedBy(tasks.checkRunningContainers)
+//    if (debugEnabled)
+    finalizedBy(tasks.checkRunningContainers)
 
     finalizedBy(tasks.pullOnStartup)
 }
