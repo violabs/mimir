@@ -49,5 +49,10 @@ gradlePlugin {
             id = "io.violabs.plugins.pipeline"
             implementationClass = "io.violabs.mimir.plugins.pipeline.PipelinePlugin"
         }
+
+        create("dockerHelper") {
+            id = "io.violabs.plugins.docker.helper"
+            implementationClass = "io.violabs.mimir.plugins.docker.DockerHelperPlugin"
+        }
     }
 }

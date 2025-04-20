@@ -5,6 +5,7 @@ plugins {
     kotlin("plugin.spring")
 
     id("io.violabs.plugins.ai.ollama-test-startup")
+    id("io.violabs.plugins.docker.helper")
 }
 
 repositories {
@@ -60,20 +61,8 @@ val debugEnabled = if (project.hasProperty("debug")) {
     false
 }
 
-fun checkAvailableDockerContainers() {
-    println("DEBUG")
-    ProcessBuilder("docker", "ps")
-        .start()
-        .inputStream
-        .bufferedReader()
-        .lines()
-        .forEach(::println)
-}
-
 tasks.named("composeUp") {
-    doLast {
-        if (debugEnabled) checkAvailableDockerContainers()
-    }
+    if (debugEnabled) finalizedBy(tasks.checkRunningContainers)
 
     finalizedBy(tasks.pullOnStartup)
 }

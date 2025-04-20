@@ -1,4 +1,4 @@
-package io.violabs.mimir.plugins.pipeline
+package io.violabs.mimir.plugins.pipeline.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
