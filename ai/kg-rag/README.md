@@ -1,6 +1,10 @@
 
 # KG + RAG
 
+## References
+
+- [Apache OpenNLP](https://opennlp.sourceforge.net/models-1.5/)
+
 ## Plan
 
 ### Ingestion Pipeline
