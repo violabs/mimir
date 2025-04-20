@@ -51,6 +51,29 @@ dockerCompose {
     isRequiredBy(tasks.test)
 }
 
+val debugEnabled = if (project.hasProperty("debug")) {
+    // Get the property value as a string and convert it to a boolean
+    // project.property("debug") returns Any?, so we convert it to String
+    project.property("debug").toString().toBoolean()
+} else {
+    // Default value if -Pdebug is not provided
+    false
+}
+
+fun checkAvailableDockerContainers() {
+    println("DEBUG")
+    ProcessBuilder("docker", "ps")
+        .start()
+        .inputStream
+        .bufferedReader()
+        .lines()
+        .forEach(::println)
+}
+
 tasks.named("composeUp") {
+    doLast {
+        if (debugEnabled) checkAvailableDockerContainers()
+    }
+
     finalizedBy(tasks.pullOnStartup)
 }

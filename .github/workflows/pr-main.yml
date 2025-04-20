@@ -74,7 +74,11 @@ jobs:
         continue-on-error: false
 
       - name: Run tests for ${{ matrix.module-namespace.module }}
-        run: ./gradlew ${{ matrix.module-namespace.module }}:test -Pkover ${{ matrix.module-namespace.module }}:koverXmlReport --info
+        run: >-
+          ./gradlew ${{ matrix.module-namespace.module }}:test 
+                    -Pdebug=${{ vars.DEBUG }} 
+                    -Pkover ${{ matrix.module-namespace.module }}:koverXmlReport 
+                    --info
         continue-on-error: false
 
       - name: Upload test reports
