@@ -1,7 +1,18 @@
 name: mimir-kgrag
 
-x-weaviate: &weaviate
-  image: semitechnologies/weaviate:stable-v1.28-bb97ca3
+x-weaviate-amd: &weaviate-amd
+  image: semitechnologies/weaviate:1.31.0-dev-adc5501.amd64
+  environment:
+    AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+    PERSISTENCE_DATA_PATH: /var/lib/weaviate
+    QUERY_DEFAULTS_LIMIT: "25"
+    DEFAULT_VECTORIZER_MODULE: "none"
+    CLUSTER_HOSTNAME: node1
+  networks:
+    - kgrag_network
+
+x-weaviate-arm: &weaviate-arm
+  image: semitechnologies/weaviate:1.31.0-dev-adc5501.arm64
   environment:
     AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
     PERSISTENCE_DATA_PATH: /var/lib/weaviate
@@ -32,14 +43,20 @@ services:
       - "11435:11434"
 
   mimir-dev-kgrag-weaviate:
-    <<: *weaviate
+    <<: *weaviate-arm
     profiles: [ dev ]
     ports:
       - "8083:8080"
 
-  mimir-test-kgrag-weaviate:
-    <<: *weaviate
-    profiles: [ test ]
+  mimir-test-kgrag-weaviate-arm:
+    <<: *weaviate-arm
+    profiles: [ test-arm ]
+    ports:
+      - "8084:8080"
+
+  mimir-test-kgrag-weaviate-amd:
+    <<: *weaviate-amd
+    profiles: [ test-amd ]
     ports:
       - "8084:8080"
 

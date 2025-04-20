@@ -47,7 +47,7 @@ tasks.withType<Test> {
 
 dockerCompose {
     useComposeFiles.set(listOf("./docker/docker-compose.yml"))
-    composeAdditionalArgs.add("--profile=test")
+    composeAdditionalArgs.add("--profile=test-amd")
     composeAdditionalArgs.add("--profile=ollama")
     isRequiredBy(tasks.test)
 }
