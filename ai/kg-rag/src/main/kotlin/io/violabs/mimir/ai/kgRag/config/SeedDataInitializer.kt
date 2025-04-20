@@ -15,7 +15,7 @@ import java.io.BufferedReader
 @ConditionalOnProperty(value = ["app.seed-data.enabled"], havingValue = "true")
 class SeedDataInitializer(private val dataService: DataService) : Loggable  {
 
-    @Value("classpath:Birth & Tragedy.txt")
+    @Value("classpath:relativity_the_special_and_general_theory.txt")
     private lateinit var seedText: Resource
 
     @Value("\${app.seed-data.limit:0}")

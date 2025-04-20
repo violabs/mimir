@@ -67,3 +67,8 @@ tasks.named("composeUp") {
 
     finalizedBy(tasks.pullOnStartup)
 }
+
+ollamaTestStartup {
+    withDefault = true
+    models("qwen2.5:1.5b")
+}

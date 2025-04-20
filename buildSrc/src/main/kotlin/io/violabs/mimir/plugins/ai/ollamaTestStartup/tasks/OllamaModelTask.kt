@@ -1,4 +1,4 @@
-package io.violabs.mimir.plugins.ai.ollamaTestStartup
+package io.violabs.mimir.plugins.ai.ollamaTestStartup.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input

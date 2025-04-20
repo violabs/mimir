@@ -11,8 +11,9 @@
 1. Read raw text
 2. Sanitize raw text
 3. Chunk cleaned text
-4. Generate embeddings for text chunks
-5. Store chunks and embeddings in a vector store
+4. Save indexed chunk metadata in postgres
+5. Generate embeddings for text chunks
+6. Store chunks and embeddings in a vector store
 
 ### KG Extraction Pipeline
 1. Process the cleaned text (or chunks) to extract entities (NER) and relationships
@@ -25,6 +26,21 @@
 4. Use the LLM to generate a natural language response based on the provided context.
 5. Presenting retrieved KG relationship or subgraph as response.
 
+### Details
+
+#### Ingestion
+
+##### Chunking strategy
+
+- Book metadata (publishing info) - skip
+- Introduction & Foreword - skip
+- Original Content
+  - Sections
+    - Chapter [target]
+      - Paragraph [target]
+      - Reference or Figure [target]
+      - Quote [target]
+    - Footnotes
 
 ## Targeted relationships
 person influenced by person
