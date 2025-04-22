@@ -62,7 +62,7 @@ services:
       - "7688:7687"
 
   mimir-nermal:
-    image: violabs/nermal:0.0.1
+    image: violabs/nermal-lg:0.0.2
     ports:
       - "5001:5001"
 

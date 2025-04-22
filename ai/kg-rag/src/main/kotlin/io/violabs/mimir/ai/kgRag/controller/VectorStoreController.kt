@@ -106,26 +106,17 @@ class VectorStoreController(private val dataService: DataService) : Loggable {
             required = true
         )
         @RequestParam(required = false, defaultValue = "10")
-        limit: Int,
-        @Parameter(
-            description = "Whether to use the similarity search and limit or just get all",
-            required = true
-        )
-        @RequestParam(name = "useLimit", required = false, defaultValue = "true") useLimit: Boolean
+        limit: Int
     ): List<Document> {
         log.info("searching for query: $query, similarityThreshold: $similarityThreshold, limit: $limit")
 
-        return if (useLimit) {
-            val searchRequest = SearchRequest
-                .builder()
-                .query(query)
-                .similarityThreshold(similarityThreshold)
-                .topK(limit)
-                .build()
+        val searchRequest = SearchRequest
+            .builder()
+            .query(query)
+            .similarityThreshold(similarityThreshold)
+            .topK(limit)
+            .build()
 
-            dataService.search(searchRequest)
-        } else {
-            dataService.search(query)
-        }
+        return dataService.search(searchRequest)
     }
 }

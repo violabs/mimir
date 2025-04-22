@@ -11,20 +11,16 @@ import org.springframework.stereotype.Service
 class DataService(private val vectorStore: VectorStore) : Loggable {
 
     fun addContent(request: AddTextBlockRequest) {
-        val (blocks, country, year, author, title) = request
+        val (blocks, title) = request
 
         blocks
             .asSequence()
-            .map { Document(it, mapOf("country" to country, "year" to year, "author" to author, "title" to title)) }
+            .map { Document(it, mapOf("title" to title)) }
             .onEach { document -> log.debug("Adding document: $document") }
             .let { documents -> vectorStore.add(documents.toList())}
     }
 
     fun search(request: SearchRequest): List<Document> {
         return vectorStore.similaritySearch(request)?.toList() ?: emptyList()
-    }
-
-    fun search(query: String): List<Document> {
-        return vectorStore.similaritySearch(query)?.toList() ?: emptyList()
     }
 }

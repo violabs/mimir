@@ -15,7 +15,7 @@ import java.io.BufferedReader
 @ConditionalOnProperty(value = ["app.seed-data.enabled"], havingValue = "true")
 class SeedDataInitializer(private val dataService: DataService) : Loggable  {
 
-    @Value("classpath:relativity_the_special_and_general_theory.txt")
+    @Value("classpath:llm_wikipedia_content_response.json")
     private lateinit var seedText: Resource
 
     @Value("\${app.seed-data.limit:0}")
@@ -23,7 +23,7 @@ class SeedDataInitializer(private val dataService: DataService) : Loggable  {
 
     @Bean
     fun seedData(): CommandLineRunner = CommandLineRunner {
-        log.info("Seeding content of Birth & Tragedy.txt")
+        log.info("Seeding content of [WIKI]: Large_language_model")
         val bufferedReader = seedText
             .inputStream
             .bufferedReader()
@@ -42,10 +42,7 @@ class SeedDataInitializer(private val dataService: DataService) : Loggable  {
 
         val request = AddTextBlockRequest(
             content,
-            country = "Prussia",
-            author = "Friedrich Wilhelm Nietzsche",
-            year = 1872,
-            title = "The Birth of Tragedy Out of the Spirit of Music"
+            title = "Large_language_model"
         )
 
         dataService.addContent(request)

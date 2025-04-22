@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Download the spacy model
 # Make sure this matches the model loaded in app.py
-RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download en_core_web_lg
 
 # Copy the application code into the container
 COPY app/ .
