@@ -1,8 +1,8 @@
 package io.violabs.mimir.ai.kgRag.controller
 
-import io.violabs.mimir.ai.kgRag.domain.DataIngestItem
-import io.violabs.mimir.ai.kgRag.domain.DataIngestTitleRequest
-import io.violabs.mimir.ai.kgRag.service.DataIngestService
+import io.violabs.mimir.ai.kgRag.domain.DataIngestDocument
+import io.violabs.mimir.ai.kgRag.domain.api.TitleRequest
+import io.violabs.mimir.ai.kgRag.service.ingestion.DataIngestService
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/ingestion")
-class DataIngestionController(private val dataIngestService: DataIngestService<DataIngestTitleRequest, *>) : Loggable {
+class DataIngestionController(private val dataIngestService: DataIngestService<TitleRequest, *>) : Loggable {
     @GetMapping("{title}")
-    suspend fun getByTitle(@PathVariable title: String): ResponseEntity<DataIngestItem> {
+    suspend fun getByTitle(@PathVariable title: String): ResponseEntity<DataIngestDocument> {
         log.info("Getting data by title: $title")
-        val item = dataIngestService.getContentWithTopicsIfAvailable(DataIngestTitleRequest(title))
+        val item = dataIngestService.getContentWithTopicsIfAvailable(TitleRequest(title))
         return ResponseEntity.ok(item)
     }
 }

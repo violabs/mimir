@@ -1,4 +1,4 @@
-package io.violabs.mimir.ai.kgRag.domain
+package io.violabs.mimir.ai.kgRag.domain.api
 
 import io.swagger.v3.oas.annotations.media.Schema
 

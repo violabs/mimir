@@ -1,6 +1,6 @@
 package io.violabs.mimir.ai.kgRag.client
 
-import io.violabs.mimir.ai.kgRag.domain.NERResponse
+import io.violabs.mimir.ai.kgRag.domain.client.ner.NERResponse
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component

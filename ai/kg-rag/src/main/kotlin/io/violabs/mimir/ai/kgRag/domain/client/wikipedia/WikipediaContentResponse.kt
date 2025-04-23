@@ -1,4 +1,4 @@
-package io.violabs.mimir.ai.kgRag.domain
+package io.violabs.mimir.ai.kgRag.domain.client.wikipedia
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

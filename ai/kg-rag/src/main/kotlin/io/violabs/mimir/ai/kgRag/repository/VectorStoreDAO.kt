@@ -1,6 +1,6 @@
-package io.violabs.mimir.ai.kgRag.service
+package io.violabs.mimir.ai.kgRag.repository
 
-import io.violabs.mimir.ai.kgRag.domain.AddTextBlockRequest
+import io.violabs.mimir.ai.kgRag.domain.api.AddTextBlockRequest
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.ai.document.Document
 import org.springframework.ai.vectorstore.SearchRequest
@@ -8,7 +8,7 @@ import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.stereotype.Service
 
 @Service
-class DataService(private val vectorStore: VectorStore) : Loggable {
+class VectorStoreDAO(private val vectorStore: VectorStore) : Loggable {
 
     fun addContent(request: AddTextBlockRequest) {
         val (blocks, title) = request

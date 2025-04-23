@@ -2,9 +2,9 @@ package io.violabs.mimir.ai.kgRag
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.violabs.mimir.ai.kgRag.domain.WikipediaContentResponse
+import io.violabs.mimir.ai.kgRag.domain.client.wikipedia.WikipediaContentResponse
 import io.violabs.mimir.ai.kgRag.domain.entity.Topic
-import io.violabs.mimir.ai.kgRag.service.TopicIdentificationService
+import io.violabs.mimir.ai.kgRag.service.TopicService
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,9 +14,9 @@ import org.springframework.core.io.Resource
 import java.io.BufferedReader
 
 @SpringBootTest
-class TopicIdentificationServiceTest(
+class TopicServiceTest(
     @Autowired private val objectMapper: ObjectMapper,
-    @Autowired private val topicIdentificationService: TopicIdentificationService
+    @Autowired private val topicService: TopicService
 ) {
     @Value("classpath:llm_wikipedia_content_response.json")
     private lateinit var seedText: Resource
@@ -55,7 +55,7 @@ class TopicIdentificationServiceTest(
                 ?.values
                 ?.firstOrNull()
 
-            val topics: List<Topic> = topicIdentificationService.identifyAndSaveTopics(page?.extract ?: "")
+            val topics: List<Topic> = topicService.identifyAndSaveTopics(page?.extract ?: "")
 
             val allTopicNames: List<String> = topics.onEach { println(it) }.map { it.name }.toList()
 

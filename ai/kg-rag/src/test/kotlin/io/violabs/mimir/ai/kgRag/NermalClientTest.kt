@@ -3,8 +3,7 @@ package io.violabs.mimir.ai.kgRag
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.violabs.mimir.ai.kgRag.client.NermalClient
-import io.violabs.mimir.ai.kgRag.domain.WikipediaContentResponse
-import io.violabs.mimir.ai.kgRag.service.TopicIdentificationService
+import io.violabs.mimir.ai.kgRag.domain.client.wikipedia.WikipediaContentResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,12 +15,10 @@ import java.io.BufferedReader
 @SpringBootTest
 class NermalClientTest(
     @Autowired private val nermalClient: NermalClient,
-    @Autowired private val objectMapper: ObjectMapper,
-    @Autowired private val topicIdentificationService: TopicIdentificationService
+    @Autowired private val objectMapper: ObjectMapper
 ) {
     @Value("classpath:llm_wikipedia_content_response.json")
     private lateinit var seedText: Resource
-
 
     @Test
     fun testNERProcessing() {

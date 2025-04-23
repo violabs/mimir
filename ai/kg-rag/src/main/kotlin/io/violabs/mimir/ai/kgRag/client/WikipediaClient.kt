@@ -1,6 +1,6 @@
 package io.violabs.mimir.ai.kgRag.client
 
-import io.violabs.mimir.ai.kgRag.domain.WikipediaContentResponse
+import io.violabs.mimir.ai.kgRag.domain.client.wikipedia.WikipediaContentResponse
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component

@@ -1,7 +1,8 @@
 package io.violabs.mimir.ai.kgRag.config
 
-import io.violabs.mimir.ai.kgRag.domain.AddTextBlockRequest
-import io.violabs.mimir.ai.kgRag.service.DataService
+import io.violabs.mimir.ai.kgRag.domain.api.AddTextBlockRequest
+import io.violabs.mimir.ai.kgRag.repository.VectorStoreDAO
+import io.violabs.mimir.ai.kgRag.service.TopicService
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
@@ -13,7 +14,10 @@ import java.io.BufferedReader
 
 @Configuration
 @ConditionalOnProperty(value = ["app.seed-data.enabled"], havingValue = "true")
-class SeedDataInitializer(private val dataService: DataService) : Loggable  {
+class SeedDataInitializer(
+    private val topicService: TopicService,
+    private val dataService: VectorStoreDAO
+) : Loggable  {
 
     @Value("classpath:llm_wikipedia_content_response.json")
     private lateinit var seedText: Resource
