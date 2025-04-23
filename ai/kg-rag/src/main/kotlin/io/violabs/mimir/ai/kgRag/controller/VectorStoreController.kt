@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import io.violabs.mimir.ai.kgRag.domain.api.AddTextBlockRequest
-import io.violabs.mimir.ai.kgRag.repository.VectorStoreDAO
+import io.violabs.mimir.ai.kgRag.domain.api.AddSearchContentRequest
+import io.violabs.mimir.ai.kgRag.service.QueryService
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.ai.document.Document
 import org.springframework.ai.vectorstore.SearchRequest
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("api/vector-store")
 @Tag(name = "vector-operations", description = "Endpoints for vector store operations")
-class VectorStoreController(private val dataService: VectorStoreDAO) : Loggable {
+class VectorStoreController(private val dataService: QueryService) : Loggable {
 
     @Operation(
         summary = "Add content to vector store",
@@ -55,7 +55,7 @@ class VectorStoreController(private val dataService: VectorStoreDAO) : Loggable 
             required = true,
             example = """{"sentences": ["First sentence to store", "Second sentence to store"]}"""
         )
-        addRequest: AddTextBlockRequest
+        addRequest: AddSearchContentRequest
     ) {
         dataService.addContent(addRequest)
     }

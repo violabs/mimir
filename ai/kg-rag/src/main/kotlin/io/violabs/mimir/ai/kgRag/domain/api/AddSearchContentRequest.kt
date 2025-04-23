@@ -3,7 +3,7 @@ package io.violabs.mimir.ai.kgRag.domain.api
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "Request object for adding content to the vector store")
-data class AddTextBlockRequest(
+data class AddSearchContentRequest(
     @field:Schema(
         description = "List of text blocks to store",
         required = true

@@ -13,7 +13,6 @@ includeModules(
     "postgres",
     "mysql"
   ),
-  "first",
   "graphql".subModules(
     "async"
   ),

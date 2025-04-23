@@ -9,6 +9,9 @@ import org.springframework.web.reactive.function.client.awaitBodyOrNull
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
+/**
+ * Mainly an example. No resiliency.
+ */
 @Component
 class WikipediaClient(
     private val webClient: WebClient,

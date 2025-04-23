@@ -43,8 +43,7 @@ class TopicService(
                 val first = it.firstOrNull() ?: return@mapNotNull null
                 val name = first.text ?: return@mapNotNull null
                 val label = first.label ?: return@mapNotNull null
-                val endCharacterIndices = it.mapNotNull { r -> r.endChar }.toList()
-                Topic(name, endCharacterIndices, label.name)
+                Topic(name, label.name)
             }
             ?: emptyList()
     }

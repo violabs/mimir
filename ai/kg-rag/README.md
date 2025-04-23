@@ -46,6 +46,11 @@ Phase 2 focus on adding more complex topic relationships.
 docker compose --profile ollama --profile dev -f ./docker/docker-compose.yml up
 ```
 
+Neo4j community edition
+```shell
+./neo4j-admin server console
+```
+
 ## Diagrams
 
 ```plantuml
