@@ -5,8 +5,9 @@ import spacy
 # Load it once when the app starts for efficiency.
 # Use 'en_core_web_md' if you downloaded the medium model.
 try:
-    nlp = spacy.load("en_core_web_sm")
+    # nlp = spacy.load("en_core_web_sm")
     # nlp = spacy.load("en_core_web_md") # Uncomment if using the medium model
+    nlp = spacy.load("en_core_web_lg") # Uncomment if using the large model
 except OSError:
     print("SpaCy model 'en_core_web_sm' not found. Please download it by running:")
     print("python -m spacy download en_core_web_sm")

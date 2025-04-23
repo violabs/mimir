@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import io.violabs.mimir.ai.kgRag.domain.AddTextBlockRequest
-import io.violabs.mimir.ai.kgRag.service.DataService
+import io.violabs.mimir.ai.kgRag.domain.api.AddTextBlockRequest
+import io.violabs.mimir.ai.kgRag.repository.VectorStoreDAO
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.ai.document.Document
 import org.springframework.ai.vectorstore.SearchRequest
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("api/vector-store")
 @Tag(name = "vector-operations", description = "Endpoints for vector store operations")
-class VectorStoreController(private val dataService: DataService) : Loggable {
+class VectorStoreController(private val dataService: VectorStoreDAO) : Loggable {
 
     @Operation(
         summary = "Add content to vector store",
@@ -106,26 +106,17 @@ class VectorStoreController(private val dataService: DataService) : Loggable {
             required = true
         )
         @RequestParam(required = false, defaultValue = "10")
-        limit: Int,
-        @Parameter(
-            description = "Whether to use the similarity search and limit or just get all",
-            required = true
-        )
-        @RequestParam(name = "useLimit", required = false, defaultValue = "true") useLimit: Boolean
+        limit: Int
     ): List<Document> {
         log.info("searching for query: $query, similarityThreshold: $similarityThreshold, limit: $limit")
 
-        return if (useLimit) {
-            val searchRequest = SearchRequest
-                .builder()
-                .query(query)
-                .similarityThreshold(similarityThreshold)
-                .topK(limit)
-                .build()
+        val searchRequest = SearchRequest
+            .builder()
+            .query(query)
+            .similarityThreshold(similarityThreshold)
+            .topK(limit)
+            .build()
 
-            dataService.search(searchRequest)
-        } else {
-            dataService.search(query)
-        }
+        return dataService.search(searchRequest)
     }
 }

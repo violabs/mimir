@@ -30,13 +30,10 @@ class WeaviateConfig(val configProperties: WeaviateConfigProperties) {
     @Bean
     fun vectorStore(weaviateClient: WeaviateClient, embeddingModel: EmbeddingModel): VectorStore {
         return WeaviateVectorStore.builder(weaviateClient, embeddingModel)
-            .objectClass("BookConfig") // Optional: defaults to "SpringAiWeaviate"
+            .objectClass("WikiConfig") // Optional: defaults to "SpringAiWeaviate"
             .consistencyLevel(ConsistentLevel.QUORUM) // Optional: defaults to ConsistentLevel.ONE
             .filterMetadataFields(
                 listOf( // Optional: fields that can be used in filters
-                    WeaviateVectorStore.MetadataField.text("country"),
-                    WeaviateVectorStore.MetadataField.number("year"),
-                    WeaviateVectorStore.MetadataField.text("author"),
                     WeaviateVectorStore.MetadataField.text("title")
                 )
             )

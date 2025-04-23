@@ -1,7 +1,8 @@
 package io.violabs.mimir.ai.kgRag.config
 
-import io.violabs.mimir.ai.kgRag.domain.AddTextBlockRequest
-import io.violabs.mimir.ai.kgRag.service.DataService
+import io.violabs.mimir.ai.kgRag.domain.api.AddTextBlockRequest
+import io.violabs.mimir.ai.kgRag.repository.VectorStoreDAO
+import io.violabs.mimir.ai.kgRag.service.TopicService
 import io.violabs.mimir.core.common.Loggable
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
@@ -13,9 +14,12 @@ import java.io.BufferedReader
 
 @Configuration
 @ConditionalOnProperty(value = ["app.seed-data.enabled"], havingValue = "true")
-class SeedDataInitializer(private val dataService: DataService) : Loggable  {
+class SeedDataInitializer(
+    private val topicService: TopicService,
+    private val dataService: VectorStoreDAO
+) : Loggable  {
 
-    @Value("classpath:Birth & Tragedy.txt")
+    @Value("classpath:llm_wikipedia_content_response.json")
     private lateinit var seedText: Resource
 
     @Value("\${app.seed-data.limit:0}")
@@ -23,7 +27,7 @@ class SeedDataInitializer(private val dataService: DataService) : Loggable  {
 
     @Bean
     fun seedData(): CommandLineRunner = CommandLineRunner {
-        log.info("Seeding content of Birth & Tragedy.txt")
+        log.info("Seeding content of [WIKI]: Large_language_model")
         val bufferedReader = seedText
             .inputStream
             .bufferedReader()
@@ -42,10 +46,7 @@ class SeedDataInitializer(private val dataService: DataService) : Loggable  {
 
         val request = AddTextBlockRequest(
             content,
-            country = "Prussia",
-            author = "Friedrich Wilhelm Nietzsche",
-            year = 1872,
-            title = "The Birth of Tragedy Out of the Spirit of Music"
+            title = "Large_language_model"
         )
 
         dataService.addContent(request)

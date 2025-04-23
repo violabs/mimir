@@ -1,6 +1,7 @@
-package io.violabs.mimir.plugins.ai.ollamaTestStartup
+package io.violabs.mimir.plugins.ai.ollamaTestStartup.tasks
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.violabs.mimir.plugins.ai.ollamaTestStartup.models.ModelResponse
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.gradle.api.DefaultTask

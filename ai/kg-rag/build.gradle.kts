@@ -31,6 +31,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+
     implementation("org.springframework.ai:spring-ai-weaviate-store")
     implementation("org.springframework.ai:spring-ai-starter-model-ollama")
     implementation(platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT"))
@@ -47,7 +49,7 @@ tasks.withType<Test> {
 
 dockerCompose {
     useComposeFiles.set(listOf("./docker/docker-compose.yml"))
-    composeAdditionalArgs.add("--profile=test-amd")
+    composeAdditionalArgs.add("--profile=test")
     composeAdditionalArgs.add("--profile=ollama")
     isRequiredBy(tasks.test)
 }
@@ -66,4 +68,9 @@ tasks.named("composeUp") {
     finalizedBy(tasks.checkRunningContainers)
 
     finalizedBy(tasks.pullOnStartup)
+}
+
+ollamaTestStartup {
+    withDefault = true
+    models("qwen2.5:1.5b")
 }

@@ -1,4 +1,4 @@
-package io.violabs.mimir.ai.kgRag.domain
+package io.violabs.mimir.ai.kgRag.domain.api
 
 import io.swagger.v3.oas.annotations.media.Schema
 
@@ -9,21 +9,6 @@ data class AddTextBlockRequest(
         required = true
     )
     val blocks: List<String>,
-    @field:Schema(
-        description = "Country of origin",
-        required = true
-    )
-    val country: String,
-    @field:Schema(
-        description = "Year of origin",
-        required = true
-    )
-    val year: Int,
-    @field:Schema(
-        description = "Author of work",
-        required = true
-    )
-    val author: String,
     @field:Schema(
         description = "Title of work",
         required = true

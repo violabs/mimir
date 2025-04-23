@@ -1,4 +1,9 @@
 app:
+  clients:
+    nermal:
+      base-url: ${NERMAL_HOST:http://localhost:5001}
+    wikipedia:
+      base-url: ${WIKIPEDIA_HOST:https://en.wikipedia.org/w/api.php}
   seed-data:
     enabled: false
   vector:
@@ -15,6 +20,9 @@ spring:
         options:
           model: ${EMBEDDINGS_OLLAMA_MODEL:nomic-embed-text:latest}
       base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      chat:
+        options:
+          model: ${CHAT_MODEL:qwen2.5:1.5b}
   neo4j:
     uri: ${NEO4J_URI:bolt://localhost:7687}
     authentication:

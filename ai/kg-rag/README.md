@@ -7,12 +7,16 @@
 
 ## Plan
 
+The quickest and easiest is to utilize Wikipedia to identify topics and then
+store them in a knowledge graph and a vector store for the semantic search.
+
 ### Ingestion Pipeline
 1. Read raw text
 2. Sanitize raw text
 3. Chunk cleaned text
-4. Generate embeddings for text chunks
-5. Store chunks and embeddings in a vector store
+4. Save indexed chunk metadata in postgres
+5. Generate embeddings for text chunks
+6. Store chunks and embeddings in a vector store
 
 ### KG Extraction Pipeline
 1. Process the cleaned text (or chunks) to extract entities (NER) and relationships
@@ -25,14 +29,16 @@
 4. Use the LLM to generate a natural language response based on the provided context.
 5. Presenting retrieved KG relationship or subgraph as response.
 
+### Details
+
+#### Ingestion
+
+##### Chunking strategy
+
+- Section as defined (wikipedia)
 
 ## Targeted relationships
-person influenced by person
-concept contrasts with concept
-work discusses concept
-person argues that idea/concept
-concept is a manifestation of principle
-work is an example of artistic form
+Phase 2 focus on adding more complex topic relationships.
 
 ## Setup
 
