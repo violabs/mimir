@@ -18,30 +18,38 @@ A comprehensive collection of sample projects demonstrating how to integrate var
 ## Project Structure 📁
 ```
 mimir/
-├── core/                 # Shared utilities and base configurations
-│   ├── common/          # Common utilities
-│   ├── sharedSql/       # Shared SQL configurations
-│   └── springJpaCore/   # JPA core implementations
-├── database/            # Database integration examples
-│   ├── postgres/        # PostgreSQL integration
-│   └── mysql/          # MySQL integration
-├── first/              # First module examples
+├── ai/  
+│   └── kg-rag/         # Knowledge Graph + RAG for topic storage and text search [WIP]
+├── buildSrc/           # Shared plugins for different gradle functionality (pipeline, ollama)
+├── core/               # Shared utilities and base configurations
+│   ├── common/         # Common utilities
+│   ├── sharedSql/      # Shared SQL configurations
+│   ├── springJpaCore/  # JPA core implementations
+│   └── testing/        # Shared test classes
+├── database/           # Database integration examples
+│   ├── mysql/          # MySQL integration
+│   └── postgres/       # Postgres integration
 ├── graphql/            # GraphQL implementations
-│   └── async/         # Async GraphQL operations
+│   └── async/          # Async GraphQL operations
 ├── kafka/              # Kafka integration examples
-│   └── simple/        # Basic Kafka setup
+│   └── simple/         # Basic Kafka setup
 ├── logs/               # Logging integrations
-│   ├── filebeat/      # Filebeat integration
-│   ├── fluentBit/     # Fluent Bit integration
-│   ├── fluentd/       # Fluentd integration
-│   └── logstash/      # Logstash integration
+│   ├── filebeat/       # Filebeat integration [WIP]
+│   ├── fluentBit/      # Fluent Bit integration [WIP]
+│   ├── fluentd/        # Fluentd integration [WIP]
+│   └── logstash/       # Logstash integration [WIP]
+├── python/             # AI related python
+│   ├── ner-service/    # Simple NER Flask app - containerize for DockerHub pulls
 ├── testing/            # Testing examples
-│   └── selenium/      # Selenium integration
+│   └── selenium/       # Selenium integration
 └── vector/             # Vector database examples
-    └── weaviate/      # Weaviate integration
+    └── weaviate/       # Weaviate integration
 ```
 
 ## Available Integrations 🔌
+
+### AI
+- [AI Documentation](/docs/ai/README.md)
 
 ### Core Features 🛠️
 - [Core Module Documentation](/docs/core/README.md)
