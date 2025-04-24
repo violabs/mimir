@@ -16,7 +16,7 @@ class DataIngestionController(private val dataIngestService: DataIngestService<T
     @GetMapping("{title}")
     suspend fun getByTitle(@PathVariable title: String): ResponseEntity<DataIngestDocument> {
         log.info("Getting data by title: $title")
-        val item = dataIngestService.getContentWithTopicsIfAvailable(TitleRequest(title))
+        val item = dataIngestService.getRawContent(TitleRequest(title))
         return ResponseEntity.ok(item)
     }
 }

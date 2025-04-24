@@ -1,8 +1,7 @@
-package io.violabs.mimir.ai.kgRag
+package io.violabs.mimir.ai.kgRag.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.violabs.mimir.ai.kgRag.client.NermalClient
 import io.violabs.mimir.ai.kgRag.domain.client.wikipedia.WikipediaContentResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test

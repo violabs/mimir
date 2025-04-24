@@ -1,25 +1,14 @@
-package io.violabs.mimir.ai.kgRag
+package io.violabs.mimir.ai.kgRag.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import io.violabs.mimir.ai.kgRag.domain.client.wikipedia.WikipediaContentResponse
+import io.violabs.mimir.ai.kgRag.IntegrationTestHarness
 import io.violabs.mimir.ai.kgRag.domain.entity.Topic
-import io.violabs.mimir.ai.kgRag.service.TopicService
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.core.io.Resource
-import java.io.BufferedReader
 
-@SpringBootTest
 class TopicServiceTest(
-    @Autowired private val objectMapper: ObjectMapper,
     @Autowired private val topicService: TopicService
-) {
-    @Value("classpath:llm_wikipedia_content_response.json")
-    private lateinit var seedText: Resource
+) : IntegrationTestHarness() {
 
     @Test
     fun testTopicIdentificationService() {
@@ -45,17 +34,8 @@ class TopicServiceTest(
                 "Transcoders",
                 "Transformer"
             )
-            val bufferReader: BufferedReader = seedText.inputStream.bufferedReader()
 
-            val content: WikipediaContentResponse = objectMapper.readValue(bufferReader.readText())
-
-            val page = content
-                .query
-                ?.pages
-                ?.values
-                ?.firstOrNull()
-
-            val topics: List<Topic> = topicService.identifyAndSaveTopics(page?.extract ?: "")
+            val topics: List<Topic> = topicService.identifyAndSaveTopics(defaultPageContent)!!
 
             val allTopicNames: List<String> = topics.onEach { println(it) }.map { it.name }.toList()
 

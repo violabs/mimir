@@ -5,7 +5,7 @@ app:
     wikipedia:
       base-url: ${WIKIPEDIA_HOST:https://en.wikipedia.org/w/api.php}
   seed-data:
-    enabled: false
+    enabled: true
   vector:
     weaviate:
       scheme: ${WEAVIATE_SCHEME:http}

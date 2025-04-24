@@ -9,6 +9,10 @@ import org.springframework.web.reactive.function.client.awaitBodyOrNull
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
+/**
+ * Nermal is the name of the small project that hosts the
+ * NER containers. Will make more robust.
+ */
 @Component
 class NermalClient(
     private val webClient: WebClient,
