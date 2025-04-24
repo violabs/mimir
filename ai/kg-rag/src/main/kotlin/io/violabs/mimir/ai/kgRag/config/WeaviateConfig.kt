@@ -1,5 +1,6 @@
 package io.violabs.mimir.ai.kgRag.config
 
+import io.violabs.mimir.ai.kgRag.domain.VectorMetadataKey
 import io.weaviate.client.Config
 import io.weaviate.client.WeaviateClient
 import jakarta.annotation.PostConstruct
@@ -34,7 +35,9 @@ class WeaviateConfig(val configProperties: WeaviateConfigProperties) {
             .consistencyLevel(ConsistentLevel.QUORUM) // Optional: defaults to ConsistentLevel.ONE
             .filterMetadataFields(
                 listOf( // Optional: fields that can be used in filters
-                    WeaviateVectorStore.MetadataField.text("title")
+                    WeaviateVectorStore.MetadataField.text(VectorMetadataKey.TITLE),
+                    WeaviateVectorStore.MetadataField.text(VectorMetadataKey.TITLE),
+                    WeaviateVectorStore.MetadataField.number(VectorMetadataKey.INDEX)
                 )
             )
             .build()

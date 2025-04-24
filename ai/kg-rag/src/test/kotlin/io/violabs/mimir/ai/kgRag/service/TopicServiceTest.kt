@@ -35,7 +35,7 @@ class TopicServiceTest(
                 "Transformer"
             )
 
-            val topics: List<Topic> = topicService.identifyAndSaveTopics(defaultPageContent)
+            val topics: List<Topic> = topicService.identifyAndSaveTopics(defaultPageContent)!!
 
             val allTopicNames: List<String> = topics.onEach { println(it) }.map { it.name }.toList()
 

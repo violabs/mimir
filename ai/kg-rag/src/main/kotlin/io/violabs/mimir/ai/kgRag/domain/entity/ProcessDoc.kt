@@ -12,4 +12,8 @@ data class ProcessDoc(
     var chunks: List<DocumentChunk>? = null
 ) : Entity<String> {
     override fun getKey(): String = title
+
+    fun toFlattenedString(): String {
+        return "ProcessDoc(title=$title, chunks=${chunks?.joinToString(",") { it.toFlattenedString() }})"
+    }
 }

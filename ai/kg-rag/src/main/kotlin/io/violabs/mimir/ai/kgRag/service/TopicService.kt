@@ -16,20 +16,21 @@ class TopicService(
         NERLabel.PERCENT,
         NERLabel.DATE,
         NERLabel.CARDINAL,
-        NERLabel.MONEY
+        NERLabel.MONEY,
+        NERLabel.ORDINAL
     )
 
     suspend fun saveTopic(topic: Topic): Topic? {
         return topicRepository.save(topic).awaitSingleOrNull()
     }
 
-    suspend fun identifyAndSaveTopics(content: String): List<Topic> {
+    suspend fun identifyAndSaveTopics(content: String): List<Topic>? {
         val topics = extractValidTopics(content)
 
-        return topics.mapNotNull { saveTopic(it) }
+        return topics?.mapNotNull { saveTopic(it) }
     }
 
-    suspend fun extractValidTopics(content: String): List<Topic> {
+    suspend fun extractValidTopics(content: String): List<Topic>? {
         val response = nermalClient.determineNamedEntities(content)
 
         return response
@@ -45,6 +46,5 @@ class TopicService(
                 val label = first.label ?: return@mapNotNull null
                 Topic(name, label.name)
             }
-            ?: emptyList()
     }
 }

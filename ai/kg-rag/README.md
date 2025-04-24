@@ -10,17 +10,18 @@
 The quickest and easiest is to utilize Wikipedia to identify topics and then
 store them in a knowledge graph and a vector store for the semantic search.
 
-### Ingestion Pipeline
+### Ingestion KG Pipeline
 1. Read raw text
 2. Sanitize raw text
 3. Chunk cleaned text
-4. Save indexed chunk metadata in postgres
-5. Generate embeddings for text chunks
-6. Store chunks and embeddings in a vector store
+4. Extract entities (NER) and determine relationships
+5. Store entities and relationships in a graph database
 
-### KG Extraction Pipeline
+### Ingestion Search Extraction Pipeline
 1. Process the cleaned text (or chunks) to extract entities (NER) and relationships
 2. Store entities and relationships in a graph database
+3. Generate embeddings for text chunks
+4. Store chunks and embeddings in a vector store
 
 ### Querying and Response Generation
 1. Performing a vector search on the text chunks
@@ -60,30 +61,34 @@ actor Client
 participant "Raw Text\nSource" as RawText
 participant Sanitizer
 participant Chunker
-participant Embedder
-participant VectorStore
 
 participant KGExtractor
+participant NERExtractor
 participant GraphDatabase
+
+participant Embedder
+participant VectorStore
 
 participant QueryService
 participant LLM
 
-== Ingestion Pipeline ==
+== Ingestion KG Extraction Pipeline ==
 RawText -> Sanitizer : send raw text
 Sanitizer -> Sanitizer : clean(raw text)
 Sanitizer --> Chunker : cleaned text
 Chunker -> Chunker : split into chunks
 loop for each chunk
-  Chunker --> Embedder : chunk
+  Chunker --> KGExtractor : chunk
+  KGExtractor -> NERExtractor : extract entities
+  KGExtractor --> GraphDatabase : store doc chunks and topics
+end
+
+== Ingestion Search Extraction Pipeline ==
+loop for each chunk
+  KGExtractor --> Embedder : chunk
   Embedder -> Embedder : generate embedding(chunk)
   Embedder --> VectorStore : store(chunk, embedding)
 end
-
-== KG Extraction Pipeline ==
-Sanitizer --> KGExtractor : cleaned text (or chunks)
-KGExtractor -> KGExtractor : perform NER & relation extraction
-KGExtractor --> GraphDatabase : store(entities, relationships)
 
 == Query & Response Generation ==
 Client -> QueryService : submit query

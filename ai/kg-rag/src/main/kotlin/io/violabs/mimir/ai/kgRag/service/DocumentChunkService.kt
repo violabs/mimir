@@ -8,18 +8,22 @@ import org.springframework.stereotype.Service
 
 // Regex to find headers like == Header ==
 // - (?m) enables MULTILINE mode (^ and $ match start/end of lines, not just start/end of string)
+// - (?<!=) negative look behind - asserts that the preceding character is not an equals sign
+// - (?!=) negative look ahead - asserts that the following character is not an equals sign
 // - ^\s* matches the start of a line followed by optional whitespace
 // - == matches the opening marker
 // - \s*(.*?)\s* captures the header text (non-greedily), trimming surrounding whitespace within the markers
 // - == matches the closing marker
 // - \s*$ matches optional whitespace followed by the end of the line
-private val SECTION_TEMPLATE = Regex("""(?m)^\s*==\s*(.*?)\s*==\s*$""")
+private val SECTION_TEMPLATE = Regex("""(?m)^\s*(?<!=)==(?!=)\s*(.*?)\s*(?<!=)==(?!=)\s*${'$'}""")
 
 private data class TextSection(val header: String?, val content: String)
 
+
 @Service
 class DocumentChunkService(
-    private val processDocRepository: ProcessDocRepository
+    private val processDocRepository: ProcessDocRepository,
+    private val topicService: TopicService,
 ) {
     suspend fun chunkAndSave(doc: ProcessDoc, content: String): ProcessDoc {
         val chunks = extractSectionsByHeader(content)
@@ -32,7 +36,8 @@ class DocumentChunkService(
                     docName = docName,
                     index = i,
                     content = chunk.content,
-                    sectionName = chunk.header
+                    sectionName = chunk.header,
+                    topics = topicService.extractValidTopics(chunk.content).takeIf { it?.isNotEmpty() == true }
                 )
             }
 
