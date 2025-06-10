@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
   implementation(project(":core"))
-  implementation(project(":core:springJpaCore"))
+  implementation(project(":core:spring-jpa-core"))
 
   implementation(kotlin("stdlib-jdk8"))
   implementation(kotlin("reflect"))

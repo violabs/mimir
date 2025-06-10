@@ -5,21 +5,22 @@ includeModules(
   "ai".subModules("kg-rag"),
   "core".subModules(
     "common",
-    "springJpaCore",
-    "sharedSql",
+    "spring-jpa-core",
+    "shared-sql",
     "testing"
   ),
   "database".subModules(
     "postgres",
-    "mysql"
+    "mysql",
+    "mongo"
   ),
   "graphql".subModules(
     "async"
   ),
   "kafka".subModules("simple"),
-  "knowledgeGraph",
+  "knowledge-graph",
   "logs".subModules(
-    "fluentBit",
+    "fluent-bit",
     "fluentd",
     "filebeat",
     "logstash"
