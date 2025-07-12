@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: kafka-avro-demo
+  kafka:
+    bootstrap-servers: localhost:29092
+    schema-registry-url: http://localhost:8090
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8090
+        auto.register.schemas: true
+        use.latest.version: true
+    consumer:
+      group-id: user-event-consumer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: http://localhost:8090
+        specific.avro.reader: true
+      auto-offset-reset: earliest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.example.kafkaavro: DEBUG
+    org.springframework.kafka: DEBUG
+    org.apache.kafka: WARN
+
+server:
+  port: 8080

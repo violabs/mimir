@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "UserEvent",
+  "namespace": "com.example.avro",
+  "doc": "Schema for user events with schema evolution support",
+  "fields": [
+    {
+      "name": "userId",
+      "type": "string",
+      "doc": "Unique identifier for the user"
+    },
+    {
+      "name": "action",
+      "type": "string",
+      "doc": "Action performed (USER_CREATED, USER_UPDATED, USER_DELETED)"
+    },
+    {
+      "name": "timestamp",
+      "type": "long",
+      "doc": "Timestamp when the event occurred (epoch millis)"
+    },
+    {
+      "name": "email",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "User email address (optional field for schema evolution testing)"
+    }
+  ]
+}
