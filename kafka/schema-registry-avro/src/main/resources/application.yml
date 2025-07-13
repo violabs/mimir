@@ -31,7 +31,6 @@ management:
 
 logging:
   level:
-    com.example.kafkaavro: DEBUG
     org.springframework.kafka: DEBUG
     org.apache.kafka: WARN
 

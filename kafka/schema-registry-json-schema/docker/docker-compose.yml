@@ -1,4 +1,4 @@
-name: 'mimir-kafka-schema-registry-avro'
+name: 'mimir-kafka-schema-registry-json-schema'
 
 services:
   zookeeper:
@@ -38,7 +38,7 @@ services:
       - zookeeper
       - kafka
     ports:
-      - "8081:8080"
+      - "9000:8080"
     restart: always
     environment:
       - KAFKA_CLUSTERS_0_NAME=local0

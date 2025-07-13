@@ -19,7 +19,8 @@ includeModules(
   ),
   "kafka".subModules(
     "simple",
-    "schema-registry-avro"
+    "schema-registry-avro",
+    "schema-registry-json-schema"
   ),
   "knowledge-graph",
   "logs".subModules(
