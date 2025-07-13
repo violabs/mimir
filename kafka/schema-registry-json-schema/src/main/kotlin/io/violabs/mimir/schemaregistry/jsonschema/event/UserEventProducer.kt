@@ -1,8 +1,6 @@
 package io.violabs.mimir.schemaregistry.jsonschema.event
 
-import io.violabs.mimir.schemaregistry.jsonschema.config.KafkaConfig
 import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV1
-import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV2
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.support.SendResult
@@ -20,7 +18,7 @@ class UserEventProducer(
     fun sendUserEvent(userEvent: UserEventV1): CompletableFuture<SendResult<String, UserEventV1>> {
         logger.info("Sending user event: ${userEvent.id} for user: ${userEvent.userId}")
 
-        return kafkaTemplateV1.send("user-event-topic", userEvent.userId, userEvent)
+        return kafkaTemplateV1.send("json-schema-demo-v1", userEvent.userId, userEvent)
             .whenComplete { result, exception ->
                 if (exception == null) {
                     logger.info("Successfully sent event ${userEvent.id} with offset: ${result.recordMetadata.offset()}")

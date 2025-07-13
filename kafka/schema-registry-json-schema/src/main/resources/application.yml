@@ -48,7 +48,7 @@ management:
 
 logging:
   level:
-    org.springframework.kafka: DEBUG
+    org.springframework.kafka: INFO
     org.apache.kafka: WARN
 
 server:
