@@ -22,14 +22,12 @@ class KafkaConfigProps(
             AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to schemaRegistryUrl,
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to producer.keySerializer,
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to producer.valueSerializer,
-            AbstractKafkaSchemaSerDeConfig.AUTO_REGISTER_SCHEMAS to producer.properties.autoRegisterSchemas,
-            AbstractKafkaSchemaSerDeConfig.USE_LATEST_VERSION to producer.properties.useLatestVersion,
-            KafkaJsonSchemaSerializerConfig.FAIL_INVALID_SCHEMA to producer.properties.jsonFailInvalidSchema,
-            KafkaJsonSchemaSerializerConfig.WRITE_DATES_AS_ISO8601 to producer.properties.jsonWriteDatesIso8601,
-            KafkaJsonSchemaSerializerConfig.LATEST_COMPATIBILITY_STRICT to producer.properties.latestCompatibilityStrict,
-            KafkaJsonSchemaSerializerConfig.SCHEMA_SPEC_VERSION to producer.properties.jsonSchemaSpecVersion,
-            //json.schema.provider.class
-            "json.schema.provider.class" to "io.confluent.kafka.schemaregistry.json.schema.JsonSchemaProvider"
+            AbstractKafkaSchemaSerDeConfig.AUTO_REGISTER_SCHEMAS to (producer.properties["autoRegisterSchemas"] ?: true),
+            AbstractKafkaSchemaSerDeConfig.USE_LATEST_VERSION to (producer.properties["useLatestVersion"] ?: true),
+            KafkaJsonSchemaSerializerConfig.FAIL_INVALID_SCHEMA to (producer.properties["jsonFailInvalidSchema"] ?: true),
+            KafkaJsonSchemaSerializerConfig.WRITE_DATES_AS_ISO8601 to (producer.properties["jsonWriteDatesIso8601"] ?: true),
+            KafkaJsonSchemaSerializerConfig.LATEST_COMPATIBILITY_STRICT to (producer.properties["latestCompatibilityStrict"] ?: true),
+            KafkaJsonSchemaSerializerConfig.SCHEMA_SPEC_VERSION to (producer.properties["jsonSchemaSpecVersion"] ?: true),
         )
             .also { println("Producer Config: $it") }
     }
@@ -40,11 +38,8 @@ class KafkaConfigProps(
             AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to schemaRegistryUrl,
             ConsumerConfig.GROUP_ID_CONFIG to consumer.groupId,
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to consumer.autoOffsetReset,
-            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to consumer.keyDeserializer,
-            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to consumer.valueDeserializer,
-            KafkaJsonSchemaDeserializerConfig.FAIL_INVALID_SCHEMA to consumer.properties.jsonFailInvalidSchema,
-            "specific.json.reader" to consumer.properties.specificJsonReader,
-            "json.schema.provider.class" to "io.confluent.kafka.schemaregistry.json.schema.JsonSchemaProvider"
+            KafkaJsonSchemaDeserializerConfig.FAIL_INVALID_SCHEMA to (consumer.properties["jsonFailInvalidSchema"] ?: true),
+            "specific.json.reader" to (consumer.properties["specificJsonReader"] ?: false),
         )
     }
 
@@ -52,17 +47,17 @@ class KafkaConfigProps(
     class Producer(
         val keySerializer: String,
         val valueSerializer: String,
-        val properties: Properties
+        val properties: Map<String, String>
     ) {
-        @ConfigurationProperties(prefix = "spring.kafka.producer.properties")
-        class Properties(
-            val autoRegisterSchemas: Boolean,
-            val useLatestVersion: Boolean,
-            val jsonFailInvalidSchema: Boolean,
-            val jsonWriteDatesIso8601: Boolean,
-            val latestCompatibilityStrict: Boolean,
-            val jsonSchemaSpecVersion: String
-        )
+//        @ConfigurationProperties(prefix = "spring.kafka.producer.properties")
+//        class Properties(
+//            val autoRegisterSchemas: Boolean,
+//            val useLatestVersion: Boolean,
+//            val jsonFailInvalidSchema: Boolean,
+//            val jsonWriteDatesIso8601: Boolean,
+//            val latestCompatibilityStrict: Boolean,
+//            val jsonSchemaSpecVersion: String
+//        )
     }
 
     @ConfigurationProperties(prefix = "spring.kafka.consumer")
@@ -71,13 +66,13 @@ class KafkaConfigProps(
         val valueDeserializer: String,
         val groupId: String,
         val autoOffsetReset: String,
-        val properties: Properties
+        val properties: Map<String, String>
     ) {
-        @ConfigurationProperties(prefix = "spring.kafka.consumer.properties")
-        class Properties(
-            val jsonFailInvalidSchema: Boolean,
-            val specificJsonReader: Boolean
-        )
+//        @ConfigurationProperties(prefix = "spring.kafka.consumer.properties")
+//        class Properties(
+//            val jsonFailInvalidSchema: Boolean,
+//            val specificJsonReader: Boolean
+//        )
     }
 
     @ConfigurationProperties(prefix = "spring.kafka.listener")

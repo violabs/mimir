@@ -8,13 +8,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.violabs.mimir.schemaregistry.jsonschema.config.serde.CustomJsonSchemaSerializer
       properties:
-        schema-registry-url: http://localhost:8090
-        auto-register-schemas: false
-        use-latest-version: true
-        json-fail-invalid-schema: true
-        json-write-dates-iso8601: true
-        latest-compatibility-strict: true
-        json-schema-spec-version: draft_2020_12
         schema.registry.url: http://localhost:8090
         auto.register.schemas: false
         use.latest.version: true
@@ -28,9 +21,6 @@ spring:
       group-id: json-schema-demo
       auto-offset-reset: earliest
       properties:
-        schema-registry-url: http://localhost:8090
-        json-fail-invalid-schema: true
-        specific-json-reader: true
         schema.registry.url: http://localhost:8090
         json.fail.invalid.schema: true
         specific.json.reader: true
