@@ -1,9 +1,7 @@
 package io.violabs.mimir.schemaregistry.jsonschema.controller
 
 import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV1
-import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV2
-import io.violabs.mimir.schemaregistry.jsonschema.domain.dto.CreateUserEventRequest
-import io.violabs.mimir.schemaregistry.jsonschema.domain.dto.CreateUserEventV2Request
+import io.violabs.mimir.schemaregistry.jsonschema.domain.CreateUserEventRequest
 import io.violabs.mimir.schemaregistry.jsonschema.event.UserEventProducer
 import io.violabs.mimir.schemaregistry.jsonschema.service.SchemaRegistryService
 import org.springframework.http.ResponseEntity
@@ -28,21 +26,6 @@ class UserEventController(
         userEventProducer.sendUserEvent(userEvent)
         return ResponseEntity.ok(userEvent)
     }
-
-//    @PostMapping("/v2")
-//    fun createUserEventV2(@RequestBody request: CreateUserEventV2Request): ResponseEntity<UserEventV2> {
-//        val userEvent = UserEventV2(
-//            userId = request.userId,
-//            eventType = request.eventType,
-//            userData = request.userData,
-//            metadata = request.metadata,
-//            correlationId = request.correlationId,
-//            additionalData = request.additionalData
-//        )
-//
-//        userEventProducer.sendUserEventV2(userEvent)
-//        return ResponseEntity.ok(userEvent)
-//    }
 
     @PostMapping("/batch")
     fun createBatchUserEvents(@RequestBody requests: List<CreateUserEventRequest>): ResponseEntity<List<UserEventV1>> {
