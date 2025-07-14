@@ -12,7 +12,7 @@ spring:
         json.fail.invalid.schema: true
         json.write.dates.iso8601: true
         latest.compatibility.strict: true
-        json.schema.spec.version: draft_2020_12
+        json.schema.spec.version: draft_2019_09
     consumer:
       group-id: json-schema-demo
       auto-offset-reset: earliest
@@ -35,6 +35,9 @@ management:
 logging:
   level:
     org.springframework.kafka: INFO
+    io:
+      confluent:
+        kafka.*: DEBUG
     org.apache.kafka: WARN
 
 server:
