@@ -17,7 +17,11 @@ includeModules(
   "graphql".subModules(
     "async"
   ),
-  "kafka".subModules("simple"),
+  "kafka".subModules(
+    "simple",
+    "schema-registry-avro",
+    "schema-registry-json-schema"
+  ),
   "knowledge-graph",
   "logs".subModules(
     "fluent-bit",

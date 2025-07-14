@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: kafka-json-schema-demo
+  kafka:
+    bootstrap-servers: localhost:29092
+    schema-registry-url: http://localhost:8090
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer
+      properties:
+        schema.registry.url: http://localhost:8090
+        auto.register.schemas: true
+        use.latest.version: true
+        json.fail.invalid.schema: true
+        json.write.dates.iso8601: true
+        latest.compatibility.strict: true
+        json.schema.spec.version: draft_2019_09
+    consumer:
+      group-id: json-schema-demo
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializer
+      properties:
+        schema.registry.url: http://localhost:8090
+        json.fail.invalid.schema: true
+        json.value.type: io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV1
+        specific.json.reader: true
+    listener:
+      ack-mode: manual
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.kafka: INFO
+    org.apache.kafka: WARN
+
+server:
+  port: 8080
