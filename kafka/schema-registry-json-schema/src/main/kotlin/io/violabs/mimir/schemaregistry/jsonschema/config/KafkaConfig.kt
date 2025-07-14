@@ -2,10 +2,10 @@ package io.violabs.mimir.schemaregistry.jsonschema.config
 
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
+import io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializer
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializerConfig
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializerConfig
-import io.violabs.mimir.schemaregistry.jsonschema.config.serde.CustomJsonSchemaDeserializer
 import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEvent
 import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV1
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -25,16 +25,17 @@ class KafkaConfig(
 ) {
 
     private fun producerFactory(): ProducerFactory<String, UserEventV1> {
-        val producerProps = kafkaConfigProps.producer.properties
+        val producerProps = kafkaConfigProps.producer
         val configProps = mapOf<String, Any>(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to kafkaConfigProps.bootstrapServers,
             AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to kafkaConfigProps.schemaRegistryUrl,
-            AbstractKafkaSchemaSerDeConfig.AUTO_REGISTER_SCHEMAS to (producerProps["autoRegisterSchemas"]?.toBoolean() ?: false),
-            KafkaJsonSchemaSerializerConfig.FAIL_INVALID_SCHEMA to (producerProps["jsonFailInvalidSchema"] ?: true),
-            KafkaJsonSchemaSerializerConfig.WRITE_DATES_AS_ISO8601 to (producerProps["jsonWriteDatesIso8601"] ?: true),
+            AbstractKafkaSchemaSerDeConfig.AUTO_REGISTER_SCHEMAS to producerProps.property("auto.register.schemas", false),
+            KafkaJsonSchemaSerializerConfig.FAIL_INVALID_SCHEMA to producerProps.property("json.fail.invalid.schema", true),
+            KafkaJsonSchemaSerializerConfig.WRITE_DATES_AS_ISO8601 to producerProps.property("json.write.dates.iso8601", true),
             // This will be overridden by our custom serializer, but good to have as fallback
             KafkaJsonSchemaSerializerConfig.SCHEMA_SPEC_VERSION to "draft_2020_12"
         )
+        println("Producer config: $configProps")
         val serializer = KafkaJsonSchemaSerializer<UserEventV1>(schemaRegistryClient, configProps)
         return DefaultKafkaProducerFactory(configProps, StringSerializer(), serializer)
     }
@@ -49,14 +50,16 @@ class KafkaConfig(
     @Bean
     fun userEventConsumerFactory(): ConsumerFactory<String, UserEventV1> {
         val configProps = mapOf<String, Any>(
-            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to "localhost:29092",
-            ConsumerConfig.GROUP_ID_CONFIG to "user-event-consumer-group",
-            AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to "http://localhost:8090",
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to kafkaConfigProps.bootstrapServers,
+            ConsumerConfig.GROUP_ID_CONFIG to kafkaConfigProps.consumer.groupId,
+            AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to kafkaConfigProps.schemaRegistryUrl,
             KafkaJsonSchemaDeserializerConfig.JSON_VALUE_TYPE to UserEvent::class.java.name,
-            KafkaJsonSchemaDeserializerConfig.FAIL_INVALID_SCHEMA to true,
-            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to false
+            KafkaJsonSchemaDeserializerConfig.FAIL_INVALID_SCHEMA to kafkaConfigProps.consumer.property("json.fail.invalid.schema", true),
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to kafkaConfigProps.consumer.property("enable.auto.commit", false),
+            KafkaJsonSchemaSerializerConfig.SCHEMA_SPEC_VERSION to "draft_2020_12"
         )
-        return DefaultKafkaConsumerFactory(configProps, StringDeserializer(), CustomJsonSchemaDeserializer())
+        val deserializer = KafkaJsonSchemaDeserializer<UserEventV1>(schemaRegistryClient, configProps)
+        return DefaultKafkaConsumerFactory(configProps, StringDeserializer(), deserializer)
     }
 
     // Listener container factory for UserEvent

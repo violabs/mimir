@@ -1,16 +1,10 @@
 package io.violabs.mimir.schemaregistry.jsonschema.service
 
-import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient
-import io.confluent.kafka.schemaregistry.json.JsonSchema
 import io.violabs.mimir.schemaregistry.jsonschema.config.JsonSchemaGenerator
 import io.violabs.mimir.schemaregistry.jsonschema.config.KafkaConfigProps
-import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV1
-import io.violabs.mimir.schemaregistry.jsonschema.domain.UserEventV2
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import jakarta.annotation.PostConstruct
 
 @Service
 class SchemaRegistryService(
@@ -21,14 +15,14 @@ class SchemaRegistryService(
 
     private val logger = LoggerFactory.getLogger(SchemaRegistryService::class.java)
 
-    @PostConstruct
-    fun init() {
-        logger.info("Initializing Schema Registry Service with URL: ${kafkaConfigProps.schemaRegistryUrl}")
-        val schema = jsonSchemaGenerator.generateSchema(UserEventV1::class.java)
-        schemaRegistryClient.register("user-events-value", JsonSchema(schema))
-
-        jsonSchemaGenerator.generateSchema(UserEventV2::class.java)
-    }
+//    @PostConstruct
+//    fun init() {
+//        logger.info("Initializing Schema Registry Service with URL: ${kafkaConfigProps.schemaRegistryUrl}")
+//        val schema = jsonSchemaGenerator.generateSchema(UserEventV1::class.java)
+//        schemaRegistryClient.register("user-events-value", JsonSchema(schema))
+//
+//        jsonSchemaGenerator.generateSchema(UserEventV2::class.java)
+//    }
 
     fun getAllSubjects(): List<String> {
         return try {
