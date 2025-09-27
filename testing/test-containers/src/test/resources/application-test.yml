@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        generate_statistics: true
+    show-sql: true
+
+  test:
+    database:
+      replace: none
+
+logging:
+  level:
+    root: INFO
+    io.violabs.testcontainers: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.stat: DEBUG
+    org.testcontainers: INFO
+    org.testcontainers.utility.DockerLoggerFactory: WARN
+    com.github.dockerjava: WARN
+    docker.image: INFO
+
+testcontainers:
+  reuse:
+    enable: true

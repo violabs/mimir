@@ -30,7 +30,8 @@ includeModules(
     "logstash"
   ),
   "testing".subModules(
-    "selenium"
+    "selenium",
+    "test-containers"
   ),
   "vector".subModules(
     "weaviate"
