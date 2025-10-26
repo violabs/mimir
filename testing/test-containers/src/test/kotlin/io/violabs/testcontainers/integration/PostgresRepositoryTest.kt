@@ -31,6 +31,10 @@ class PostgresRepositoryTest {
             .withUsername("testuser")
             .withPassword("testpass")
 
+        /**
+         * Setup so that Spring Boot uses the Testcontainers PostgreSQL instance
+         * for its datasource configuration.
+         */
         @JvmStatic
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {
@@ -46,9 +50,6 @@ class PostgresRepositoryTest {
 
     @Autowired
     private lateinit var productRepository: ProductRepository
-
-    @Autowired
-    private lateinit var testEntityManager: TestEntityManager
 
     private lateinit var testProduct: Product
 

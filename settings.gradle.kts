@@ -17,6 +17,10 @@ includeModules(
   "graphql".subModules(
     "async"
   ),
+  "ibm-mq".subModules(
+    "producer",
+    "consumer"
+  ),
   "kafka".subModules(
     "simple",
     "schema-registry-avro",
