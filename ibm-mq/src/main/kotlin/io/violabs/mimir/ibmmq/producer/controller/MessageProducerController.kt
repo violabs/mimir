@@ -4,12 +4,14 @@ import io.violabs.mimir.ibmmq.producer.domain.MessageRequest
 import io.violabs.mimir.ibmmq.producer.domain.MessageResponse
 import io.violabs.mimir.ibmmq.producer.service.MessageProducerService
 import mu.KotlinLogging
+import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 private val logger = KotlinLogging.logger {}
 
 @RestController
+@Profile(value = ["default", "producer"])
 @RequestMapping("/api/messages")
 class MessageProducerController(
     private val messageProducerService: MessageProducerService

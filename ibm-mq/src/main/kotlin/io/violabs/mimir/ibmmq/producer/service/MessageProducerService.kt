@@ -4,6 +4,7 @@ import io.violabs.mimir.ibmmq.producer.domain.MessageRequest
 import io.violabs.mimir.ibmmq.producer.domain.MessageResponse
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Service
 import java.util.*
@@ -11,6 +12,7 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 @Service
+@Profile(value = ["default", "producer"])
 class MessageProducerService(
     private val jmsTemplate: JmsTemplate
 ) {

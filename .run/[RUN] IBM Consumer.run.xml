@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[RUN] IBM Consumer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="consumer" />
+    <module name="mimir.ibm-mq.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.violabs.mimir.ibmmq.producer.IbmMqApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

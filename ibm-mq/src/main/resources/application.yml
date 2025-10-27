@@ -20,13 +20,3 @@ logging:
   level:
     io.violabs: DEBUG
     com.ibm.mq: DEBUG
-
----
-spring:
-  config:
-    activate:
-      on-profile: test
-
-ibm:
-  mq:
-    connName: localhost(1415)

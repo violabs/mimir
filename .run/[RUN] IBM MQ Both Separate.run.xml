@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[RUN] IBM MQ Both Separate" type="CompoundRunConfigurationType">
+    <toRun name="[RUN] IBM Consumer" type="SpringBootApplicationConfigurationType" />
+    <toRun name="[RUN] IBM Producer" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
