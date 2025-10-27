@@ -17,6 +17,7 @@ includeModules(
   "graphql".subModules(
     "async"
   ),
+  "ibm-mq",
   "kafka".subModules(
     "simple",
     "schema-registry-avro",
@@ -30,7 +31,8 @@ includeModules(
     "logstash"
   ),
   "testing".subModules(
-    "selenium"
+    "selenium",
+    "test-containers"
   ),
   "vector".subModules(
     "weaviate"
