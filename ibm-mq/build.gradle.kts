@@ -7,8 +7,6 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core"))
-
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -25,12 +23,6 @@ dependencies {
 
 repositories {
     mavenCentral()
-}
-
-dockerCompose {
-    useComposeFiles.set(listOf("./compose-files/docker-compose.yml"))
-    composeAdditionalArgs.add("--profile=test")
-    isRequiredBy(tasks.test)
 }
 
 tasks.withType<Test> {
