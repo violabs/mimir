@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(scanBasePackages = ["io.violabs.mimir"])
-class IbmMqProducerApplication
+class IbmMqApplication
 
 fun main(args: Array<String>) {
-    runApplication<IbmMqProducerApplication>(*args)
+    runApplication<IbmMqApplication>(*args)
 }
