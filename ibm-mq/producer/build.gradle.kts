@@ -28,7 +28,7 @@ repositories {
 }
 
 dockerCompose {
-    useComposeFiles.set(listOf("../docker/docker-compose.yml"))
+    useComposeFiles.set(listOf("./compose-files/docker-compose.yml"))
     composeAdditionalArgs.add("--profile=test")
     isRequiredBy(tasks.test)
 }

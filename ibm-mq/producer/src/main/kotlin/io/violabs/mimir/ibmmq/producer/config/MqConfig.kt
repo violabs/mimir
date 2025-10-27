@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jms.annotation.EnableJms
 import org.springframework.jms.connection.CachingConnectionFactory
+import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter
 import org.springframework.jms.core.JmsTemplate
 
 @Configuration
@@ -38,11 +39,19 @@ class MqConfig {
         factory.transportType = WMQConstants.WMQ_CM_CLIENT
         factory.ccsid = 1208
 
-        return CachingConnectionFactory(factory)
+        // Provide credentials via Spring adapter so connections are created with user/password
+        val credentialsAdapter = UserCredentialsConnectionFactoryAdapter()
+        credentialsAdapter.setTargetConnectionFactory(factory)
+        credentialsAdapter.setUsername(user)
+        credentialsAdapter.setPassword(password)
+
+        return CachingConnectionFactory(credentialsAdapter)
     }
 
     @Bean
     fun jmsTemplate(connectionFactory: CachingConnectionFactory): JmsTemplate {
-        return JmsTemplate(connectionFactory)
+        return JmsTemplate(connectionFactory).apply {
+            isExplicitQosEnabled = true
+        }
     }
 }

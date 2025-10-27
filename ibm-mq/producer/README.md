@@ -85,11 +85,48 @@ Configuration is located in `src/main/resources/application.yml`:
 
 ## Testing
 
+### Integration Tests
+
+The project includes comprehensive integration tests that verify:
+- Message sending to IBM MQ queues
+- Message priority handling
+- Custom metadata/properties
+- Batch message processing
+- REST API endpoints
+
+### Running Tests
+
+**Manual approach** (recommended until docker-compose gradle plugin issues are resolved):
+
 ```bash
+# 1. Start the test IBM MQ container
+cd ibm-mq/producer/compose-files
+docker-compose --profile test up -d
+
+# 2. Wait for IBM MQ to be ready (about 10-15 seconds)
+docker logs ibm-mq-test-ibm-mq-1 --tail 20
+
+# 3. Run the tests
 ./gradlew :ibm-mq:producer:test
+
+# 4. Stop the test container when done
+docker-compose --profile test down
 ```
 
-Tests will automatically start a test IBM MQ container on port 1415.
+### Test Coverage
+
+- **IbmMqProducerApplicationTest**: Basic Spring Boot context loading test
+- **MessageProducerServiceIntegrationTest**:
+  - Single message production
+  - Batch message production
+  - Message metadata handling
+  - Empty batch handling
+- **MessageProducerControllerIntegrationTest**:
+  - POST /api/messages endpoint
+  - POST /api/messages/batch endpoint
+  - GET /api/messages/health endpoint
+  - Priority levels verification
+  - Metadata propagation
 
 ## MQ Web Console
 

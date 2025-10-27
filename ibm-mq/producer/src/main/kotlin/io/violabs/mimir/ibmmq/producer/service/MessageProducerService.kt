@@ -26,7 +26,12 @@ class MessageProducerService(
         try {
             jmsTemplate.send(queueName) { session ->
                 val message = session.createTextMessage(request.content)
-                message.jmsMessageID = messageId
+
+                // Do NOT set JMSMessageID manually; the provider assigns it.
+                // Attach our generated id as an application property instead.
+                message.setStringProperty("mimirMessageId", messageId)
+
+                // Set desired priority; provider may override unless QoS is enabled.
                 message.jmsPriority = request.priority
 
                 // Add custom properties from metadata
