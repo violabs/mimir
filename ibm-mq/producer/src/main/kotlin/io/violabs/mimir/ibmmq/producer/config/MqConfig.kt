@@ -2,10 +2,12 @@ package io.violabs.mimir.ibmmq.producer.config
 
 import com.ibm.mq.jakarta.jms.MQConnectionFactory
 import com.ibm.msg.client.jakarta.wmq.WMQConstants
+import jakarta.jms.Session
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jms.annotation.EnableJms
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory
 import org.springframework.jms.connection.CachingConnectionFactory
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter
 import org.springframework.jms.core.JmsTemplate
@@ -52,6 +54,15 @@ class MqConfig {
     fun jmsTemplate(connectionFactory: CachingConnectionFactory): JmsTemplate {
         return JmsTemplate(connectionFactory).apply {
             isExplicitQosEnabled = true
+        }
+    }
+
+    @Bean
+    fun jmsListenerContainerFactory(connectionFactory: CachingConnectionFactory): DefaultJmsListenerContainerFactory {
+        return DefaultJmsListenerContainerFactory().apply {
+            setConnectionFactory(connectionFactory)
+            setConcurrency("1-1")
+            setSessionAcknowledgeMode(Session.AUTO_ACKNOWLEDGE)
         }
     }
 }
